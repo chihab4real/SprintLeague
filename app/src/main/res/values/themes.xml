@@ -3,6 +3,15 @@
     <style name="Base.Theme.SprintLeague" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <item name="fontFamily"> @font/funnel_display</item>
+
+
+
+
+        <item name="colorPrimary">@color/solmon</item>
+        <item name="colorPrimaryVariant">@color/solmon_variant</item>
+
     </style>
 
     <style name="Theme.SprintLeague" parent="Base.Theme.SprintLeague" />
