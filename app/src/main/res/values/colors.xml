@@ -2,4 +2,24 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="pumpkin">#EE7B30</color>
+
+
+    <color name="solmon">#fd8270</color>
+    <color name="solmon_variant">#ca6859</color>
+    <color name="solmon_dark">#190d0b</color>
+
+    <color name = "black_white">#FF000000</color>
+    <color name = "white_black">#FFFFFFFF</color>
+    <color name = "gray_white">#FF808080</color>
+    <color name = "white_white">#FFFFFFFF</color>
+    <color name="white_lightblack">#FFFFFFFF</color>
+    <color name="lightsolmon_gray">#ffe9e6</color>
+    <color name = "white_gray">#FFFFFFFF</color>
+    <color name="error_red">#D22B2B</color>
+    <color name="solmon_solmondark">#fd8270</color>
+
+
+
 </resources>
+

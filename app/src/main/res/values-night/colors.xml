@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+
+    <color name="white">#FFFFFFFF</color>
+    <color name="solmon">#fd8270</color>
+    <color name="solmon_variant">#ca6859</color>
+    <color name="solmon_dark">#190d0b</color>
+
+
+
+
+
+
+
+
+
+
+
+    <color name="swipe_1">#2D3D52</color>
+    <color name="swipe_2">#232F3E</color>
+    <color name="swipe_3">#394D66</color>
+
+
+    <color name="test2">#C36354</color>
+    <color name="test3">#d8b116</color>
+
+
+    <color name="colorPrimary1">#2F4F4F</color>
+    <color name="colorPrimaryDark1">#008197</color>
+    <color name="colorAccent1">#f0e0af</color>
+
+
+    <color name="black_2">#474747</color>
+
+    <color name="greys"> #FAFAFA</color>
+
+
+
+
+
+
+
+    <color name = "black_white">#FFFFFFFF</color>
+    <color name = "white_black">#FF000000</color>
+    <color name = "gray_white">#FFFFFFFF</color>
+    <color name = "white_white">#FFFFFFFF</color>
+    <color name="white_lightblack">#FF141218</color>
+    <color name="lightsolmon_gray">#414141</color>
+    <color name = "white_gray">#414141</color>
+    <color name="error_red">#D22B2B</color>
+    <color name="solmon_solmondark">#cc695a</color>
+</resources>
