@@ -82,15 +82,23 @@ public class FirstActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            getUserFromDataBase(user.getUid());
 
-                            startActivity(new Intent(FirstActivity.this, MainActivity.class));
-                            finish();
+                            if(user.isEmailVerified()){
+                                getUserFromDataBase(user.getUid());
+
+                                startActivity(new Intent(FirstActivity.this, MainActivity.class));
+                                finish();
+                            }else{
+                                startActivity(new Intent(FirstActivity.this, LoginActivity.class));
+                                finish();
+                            }
+
                             //updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             startActivity(new Intent(FirstActivity.this, LoginActivity.class));
+                            finish();
                             //
                             //updateUI(null);
                         }
@@ -109,7 +117,7 @@ public class FirstActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
 
-                Toast.makeText(getApplicationContext(), user.getEmail(),Toast.LENGTH_LONG).show();
+
 
 
                 AccountManager.currentUser = user;

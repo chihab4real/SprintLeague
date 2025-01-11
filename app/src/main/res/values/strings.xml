@@ -39,4 +39,5 @@
     <string name="user_email">User Email</string>
     <string name="user_feature_soon" translatable="false">Feature for user to be done soon</string>
     <string name="log_out">Log Out</string>
+    <string name="verify_account">Please verify your account before logging in.</string>
 </resources>
