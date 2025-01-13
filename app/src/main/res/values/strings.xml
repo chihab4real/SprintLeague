@@ -40,4 +40,15 @@
     <string name="user_feature_soon" translatable="false">Feature for user to be done soon</string>
     <string name="log_out">Log Out</string>
     <string name="verify_account">Please verify your account before logging in.</string>
+    <string name="your_answer">Your answer</string>
+    <string name="enter_valid_answer">Please Select a question or enter a valid answer</string>
+
+    <string-array name="security_question">
+        <item>Please Select a security Question</item>
+        <item>What is the name of your first pet?</item>
+        <item>In which city were you born?</item>
+        <item>What was the name of your first school?</item>
+        <item>What is the name of the street you grew up on?</item>
+        <item>What was the name of your first boss?</item>
+    </string-array>
 </resources>

@@ -10,12 +10,15 @@ public class User {
     private String profilePic;
     private boolean isActive;
 
+    private String securityQuestion;
+    private String securityQuestionResponse;
+
 
 
     public User() {
     }
 
-    public User(String id, String email, String firstName, String lastName, String password, String profilePic, boolean isActive) {
+    public User(String id, String email, String firstName, String lastName, String password, String profilePic, boolean isActive, String securityQuestion, String securityQuestionResponse) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
@@ -23,6 +26,8 @@ public class User {
         this.password = password;
         this.profilePic = profilePic;
         this.isActive = isActive;
+        this.securityQuestion = securityQuestion;
+        this.securityQuestionResponse = securityQuestionResponse;
     }
 
 
@@ -80,5 +85,22 @@ public class User {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+
+    public String getSecurityQuestion() {
+        return securityQuestion;
+    }
+
+    public void setSecurityQuestion(String securityQuestion) {
+        this.securityQuestion = securityQuestion;
+    }
+
+    public String getSecurityQuestionResponse() {
+        return securityQuestionResponse;
+    }
+
+    public void setSecurityQuestionResponse(String securityQuestionResponse) {
+        this.securityQuestionResponse = securityQuestionResponse;
     }
 }
