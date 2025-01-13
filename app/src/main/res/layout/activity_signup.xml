@@ -479,7 +479,7 @@
                                 android:background="@android:color/transparent"
 
                                 android:hint="@string/your_answer"
-                                android:inputType="textPersonName" />
+                                android:inputType="text" />
 
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>

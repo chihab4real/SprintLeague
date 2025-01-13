@@ -68,19 +68,9 @@ public class LoginActivity extends AppCompatActivity {
             isPasswordVisible = !isPasswordVisible;
         });
 
-//        forgot_password.setOnClickListener(view -> {
-//            FirebaseUser user = mAuth.getCurrentUser();
-//            if (user != null && !user.isEmailVerified()) {
-//                user.sendEmailVerification()
-//                        .addOnCompleteListener(task -> {
-//                            if (task.isSuccessful()) {
-//                                Toast.makeText(LoginActivity.this, "Verification email sent. Please check your inbox.", Toast.LENGTH_SHORT).show();
-//                            } else {
-//                                Toast.makeText(LoginActivity.this, "Failed to send verification email.", Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
-//            }
-//        });
+        forgot_password.setOnClickListener(view -> {
+          startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
+        });
 
         sigup_TextView.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, SignupActivity.class)));
 

@@ -201,7 +201,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
                 android:textAlignment="center"
-                android:text="@string/forgot_password"
+                android:text="@string/forgot_password_question"
                 android:layout_height="wrap_content"/>
 
             <LinearLayout

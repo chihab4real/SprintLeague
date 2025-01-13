@@ -19,7 +19,8 @@
     <string name="sign_up_facebook">Sign up with Facebook</string>
     <string name="already_have_account">Already have an account?</string>
     <string name="dont_have_account">Don\'t have an account ?</string>
-    <string name="forgot_password">Forgot password?</string>
+    <string name="forgot_password_question">Forgot password?</string>
+    <string name="forgot_password">Forgot password</string>
     <string name="email_or_phone">Email</string>
     <string name="enter_valid_name">Please enter a valid name</string>
     <string name="enter_valid_login">Please enter a valid Email</string>
@@ -42,6 +43,15 @@
     <string name="verify_account">Please verify your account before logging in.</string>
     <string name="your_answer">Your answer</string>
     <string name="enter_valid_answer">Please Select a question or enter a valid answer</string>
+    <string name="enter_your_email">Enter Email Address</string>
+    <string name="send">Send</string>
+    <string name="email_dont_exist">There is no account linked with the provided Email</string>
+    <string name="secuirtu_question">Enter The Answer For Your Security Question</string>
+    <string name="test_question">Please Select a security Question</string>
+    <string name="check">Check</string>
+    <string name="wrong_answer">Wrong Answer, Please Try Again!</string>
+    <string name="enter_new_password">Enter Your New Password</string>
+    <string name="change">Change</string>
 
     <string-array name="security_question">
         <item>Please Select a security Question</item>
