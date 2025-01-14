@@ -5,12 +5,14 @@ import android.content.SharedPreferences;
 
 public class AccountManager {
 
-    protected static User currentUser;
+    public static User currentUser = null ;
     private static final String PREF_NAME = "MyPrefs";
     private SharedPreferences.Editor editor;
     private SharedPreferences sharedPreferences;
 
     private Context context;
+
+
 
     public AccountManager(Context context) {
         this.context = context;

@@ -61,7 +61,7 @@ public class FirstActivity extends AppCompatActivity {
 
             autoLoginUser(email, password, id);
         }else{
-            startActivity(new Intent(FirstActivity.this, LoginActivity.class));
+            startActivity(new Intent(FirstActivity.this, MainMenuActivity.class));
         }
     }
 
@@ -86,10 +86,10 @@ public class FirstActivity extends AppCompatActivity {
                             if(user.isEmailVerified()){
                                 getUserFromDataBase(user.getUid());
 
-                                startActivity(new Intent(FirstActivity.this, MainActivity.class));
+                                startActivity(new Intent(FirstActivity.this, MainMenuActivity.class));
                                 finish();
                             }else{
-                                startActivity(new Intent(FirstActivity.this, LoginActivity.class));
+                                startActivity(new Intent(FirstActivity.this, MainMenuActivity.class));
                                 finish();
                             }
 
@@ -97,7 +97,7 @@ public class FirstActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            startActivity(new Intent(FirstActivity.this, LoginActivity.class));
+                            startActivity(new Intent(FirstActivity.this, MainMenuActivity.class));
                             finish();
                             //
                             //updateUI(null);
