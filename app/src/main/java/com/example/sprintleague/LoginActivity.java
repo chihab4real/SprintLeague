@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,8 +21,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -110,6 +114,8 @@ public class LoginActivity extends AppCompatActivity {
 //                            Toast.makeText(LoginActivity.this, user.getUid(), Toast.LENGTH_LONG).show();
                             updateUserStatusToActive(user.getUid(),email,password);
 
+                            getUserFromDataBase(user.getUid());
+
 
                         } else {
                             login_failed_TextView.setText(R.string.verify_account);
@@ -131,7 +137,9 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
 
                         accountManager.saveSignUpDataToSharedPref(email,password,userId);
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+
+
                         finish();
 
 //                        Toast.makeText(LoginActivity.this, "Account activated successfully!", Toast.LENGTH_SHORT).show();
@@ -139,5 +147,32 @@ public class LoginActivity extends AppCompatActivity {
 //                        Toast.makeText(LoginActivity.this, "Failed to activate account. Please try again.", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+
+    private void getUserFromDataBase(String userId) {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
+
+
+
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+
+
+
+
+                AccountManager.currentUser = user;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
     }
 }

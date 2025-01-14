@@ -52,6 +52,11 @@
     <string name="wrong_answer">Wrong Answer, Please Try Again!</string>
     <string name="enter_new_password">Enter Your New Password</string>
     <string name="change">Change</string>
+    <string name="comma">,</string>
+    <string name="logout">Logout</string>
+    <string name="hey_there">Oh Hey There!</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="text_attraction_signin">Sign in and Join our Running Community, and attend and organize Events</string>
 
     <string-array name="security_question">
         <item>Please Select a security Question</item>
@@ -61,4 +66,8 @@
         <item>What is the name of the street you grew up on?</item>
         <item>What was the name of your first boss?</item>
     </string-array>
+    <string name="title_activity_main_menu">MainMenuActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_search">Search</string>
+    <string name="title_account">Account</string>
 </resources>
