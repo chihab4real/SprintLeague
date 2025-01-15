@@ -28,9 +28,11 @@ public class AccountFragment extends Fragment {
 
     private FragmentAccountBinding binding;
 
-    private TextView userFirstName;
+    private TextView userFirstName, userLastName;
     private RelativeLayout logout_clik;
     private LinearLayout user_logged_in_layout, user_not_logged_in_layout;
+
+    private LinearLayout editMyAccount, upcomingTour,archiveTour, createTour, myTour;
 
 
     private RelativeLayout login_click, signup_clik;
@@ -47,19 +49,30 @@ public class AccountFragment extends Fragment {
         user_not_logged_in_layout = root.findViewById(R.id.account_layout_not_logged_in);
 
         userFirstName = root.findViewById(R.id.account_user_first_name);
+        userLastName = root.findViewById(R.id.account_user_last_name);
+
         logout_clik = root.findViewById(R.id.logout_click);
 
 
         login_click = root.findViewById(R.id.account_click_login);
         signup_clik = root.findViewById(R.id.account_click_signup);
 
+        editMyAccount = root.findViewById(R.id.account_editaccount_layout);
+        upcomingTour = root.findViewById(R.id.account_upcomin_tour_layout);
+        archiveTour = root.findViewById(R.id.account_archive_tour_layout);
+        createTour = root.findViewById(R.id.account_create_tour_layout);
+        myTour = root.findViewById(R.id.account_my_tour_layout);
+
         if(AccountManager.currentUser != null){
             user_logged_in_layout.setVisibility(View.VISIBLE);
+            logout_clik.setVisibility(View.VISIBLE);
             user_not_logged_in_layout.setVisibility(View.GONE);
 
             userFirstName.setText(AccountManager.currentUser.getFirstName());
+            userLastName.setText(AccountManager.currentUser.getLastName());
         }else{
             user_logged_in_layout.setVisibility(View.GONE);
+            logout_clik.setVisibility(View.GONE);
             user_not_logged_in_layout.setVisibility(View.VISIBLE);
         }
 
@@ -86,6 +99,30 @@ public class AccountFragment extends Fragment {
             }
         });
 
+        editMyAccount.setOnClickListener(view -> {
+            Toast.makeText(getContext(),R.string.edit_account_details,Toast.LENGTH_SHORT).show();
+        });
+
+        upcomingTour.setOnClickListener(view -> {
+            Toast.makeText(getContext(),R.string.upcoming_tournaments,Toast.LENGTH_SHORT).show();
+        });
+
+
+        archiveTour.setOnClickListener(view -> {
+            Toast.makeText(getContext(),R.string.archive_tournaments,Toast.LENGTH_SHORT).show();
+        });
+
+
+        createTour.setOnClickListener(view -> {
+            Toast.makeText(getContext(),R.string.add_tournament,Toast.LENGTH_SHORT).show();
+        });
+
+
+        myTour.setOnClickListener(view -> {
+            Toast.makeText(getContext(),R.string.my_tournament,Toast.LENGTH_SHORT).show();
+        });
+
+
 
         return root;
     }
@@ -107,6 +144,7 @@ public class AccountFragment extends Fragment {
         AccountManager.currentUser = null;
 
         user_logged_in_layout.setVisibility(View.GONE);
+        logout_clik.setVisibility(View.GONE);
         user_not_logged_in_layout.setVisibility(View.VISIBLE);
 
 
@@ -119,11 +157,14 @@ public class AccountFragment extends Fragment {
 
         if(AccountManager.currentUser != null){
             user_logged_in_layout.setVisibility(View.VISIBLE);
+            logout_clik.setVisibility(View.VISIBLE);
             user_not_logged_in_layout.setVisibility(View.GONE);
 
             userFirstName.setText(AccountManager.currentUser.getFirstName());
+            userLastName.setText(AccountManager.currentUser.getLastName());
         }else{
             user_logged_in_layout.setVisibility(View.GONE);
+            logout_clik.setVisibility(View.GONE);
             user_not_logged_in_layout.setVisibility(View.VISIBLE);
         }
 

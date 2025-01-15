@@ -35,6 +35,8 @@
 
     <color name="greys"> #FAFAFA</color>
 
+    <color name="solmon_black">#FF000000</color>
+
 
 
 
@@ -50,4 +52,7 @@
     <color name = "white_gray">#414141</color>
     <color name="error_red">#D22B2B</color>
     <color name="solmon_solmondark">#cc695a</color>
+    <color name="lightgray_darkgray">#181818</color>
+
+    <color name="lightsolmon_darkgray">#181818</color>
 </resources>

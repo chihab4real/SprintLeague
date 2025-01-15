@@ -57,6 +57,7 @@ public class SignupActivity extends AppCompatActivity  {
         emailEditText = findViewById(R.id.signup_edittext_email_or_phone);
         passwordEditText = findViewById(R.id.signup_edittext_password);
 
+
         click_signup = findViewById(R.id.signup_click_signup);
         login_text_view = findViewById(R.id.signup_text_click_login);
         valid_name = findViewById(R.id.text_view_enter_valid_name);
@@ -64,6 +65,7 @@ public class SignupActivity extends AppCompatActivity  {
         valid_password = findViewById(R.id.text_view_enter_valid_password);
         valid_password_req = findViewById(R.id.text_view_enter_password_req);
         valid_answer = findViewById(R.id.text_view_enter_valid_answer);
+
 
         hide_password_icon = findViewById(R.id.signup_icon_hide_show_password);
 
@@ -132,34 +134,38 @@ public class SignupActivity extends AppCompatActivity  {
 
 
 
+
         if (validator.isNameValid(firstName) && validator.isNameValid(lastName)){
             valid_name.setVisibility(View.GONE);
 
 
-            if(validator.isEmailValid(email)){
-                valid_email.setVisibility(View.GONE);
+                if(validator.isEmailValid(email)){
+                    valid_email.setVisibility(View.GONE);
 
-                if(validator.isPasswordValid(password)){
-                    valid_password.setVisibility(View.GONE);
-                    valid_password_req.setVisibility(View.GONE);
+                    if(validator.isPasswordValid(password)){
+                        valid_password.setVisibility(View.GONE);
+                        valid_password_req.setVisibility(View.GONE);
 
-                    if(currentQuestionID !=0 && validator.isNameValid(answer)){
-                        valid_answer.setVisibility(View.GONE);
+                        if(currentQuestionID !=0 && validator.isNameValid(answer)){
+                            valid_answer.setVisibility(View.GONE);
 
-                        return true;
+                            return true;
+                        }else{
+
+                            valid_answer.setVisibility(View.VISIBLE);
+                        }
+
                     }else{
+                        valid_password.setVisibility(View.VISIBLE);
+                        valid_password_req.setVisibility(View.VISIBLE);
 
-                        valid_answer.setVisibility(View.VISIBLE);
                     }
-
                 }else{
-                    valid_password.setVisibility(View.VISIBLE);
-                    valid_password_req.setVisibility(View.VISIBLE);
-
+                    valid_email.setVisibility(View.VISIBLE);
                 }
-            }else{
-                valid_email.setVisibility(View.VISIBLE);
-            }
+
+
+
 
 
         }else{
@@ -207,7 +213,7 @@ public class SignupActivity extends AppCompatActivity  {
     }
 
     private void createUserDataBase(String id, String firstName, String lastName, String email, String password, String question, String answer) {
-        User user = new User(id, email, firstName, lastName, password, "", false, question,answer);
+        User user = new User(id, email, firstName, lastName, password, "", false, question,answer, "");
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference();

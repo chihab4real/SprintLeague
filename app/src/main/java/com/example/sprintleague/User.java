@@ -15,10 +15,14 @@ public class User {
 
 
 
+    private String Ranking;
+
+
+
     public User() {
     }
 
-    public User(String id, String email, String firstName, String lastName, String password, String profilePic, boolean isActive, String securityQuestion, String securityQuestionResponse) {
+    public User(String id, String email, String firstName, String lastName, String password, String profilePic, boolean isActive, String securityQuestion, String securityQuestionResponse,String ranking) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
@@ -28,6 +32,8 @@ public class User {
         this.isActive = isActive;
         this.securityQuestion = securityQuestion;
         this.securityQuestionResponse = securityQuestionResponse;
+
+        this.Ranking = ranking;
     }
 
 
@@ -102,5 +108,13 @@ public class User {
 
     public void setSecurityQuestionResponse(String securityQuestionResponse) {
         this.securityQuestionResponse = securityQuestionResponse;
+    }
+
+    public String getRanking() {
+        return Ranking;
+    }
+
+    public void setRanking(String ranking) {
+        Ranking = ranking;
     }
 }

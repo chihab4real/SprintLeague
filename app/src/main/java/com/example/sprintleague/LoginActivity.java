@@ -57,6 +57,8 @@ public class LoginActivity extends AppCompatActivity {
         sigup_TextView = findViewById(R.id.login_text_click_signup);
         forgot_password = findViewById(R.id.login_text_click_forgetpassword);
 
+
+
         accountManager = new AccountManager(LoginActivity.this);
         mAuth = FirebaseAuth.getInstance();
 
