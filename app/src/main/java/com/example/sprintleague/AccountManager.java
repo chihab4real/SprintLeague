@@ -3,6 +3,8 @@ package com.example.sprintleague;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.security.SecureRandom;
+
 public class AccountManager {
 
     public static User currentUser = null ;
@@ -45,6 +47,19 @@ public class AccountManager {
         editor.putString("userPassword", password);
         editor.putString("userUid", uid);
         editor.apply();
+    }
+
+    public static String generateAlphaNumericId(int length) {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(characters.length());
+            sb.append(characters.charAt(index));
+        }
+
+        return sb.toString();
     }
 
 

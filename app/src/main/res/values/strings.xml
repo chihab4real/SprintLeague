@@ -73,6 +73,43 @@
     <string name="organize">Organize</string>
     <string name="tournaments_list">Tournaments List</string>
     <string name="my_activity">My Activity</string>
+    <string name="tournament_title">Tournament Title</string>
+    <string name="tournament_organizer">Tournament Organizer</string>
+    <string name="distance">Distance</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="hh">HH</string>
+    <string name="mm">MM</string>
+    <string name="am">AM</string>
+    <string name="pm">PM</string>
+    <string name="city">City</string>
+    <string name="postal_code">Postal Code</string>
+    <string name="street">Street</string>
+    <string name="country">Country</string>
+    <string name="max_partic">Max Participants</string>
+    <string name="sponsors">Sponsors</string>
+    <string name="add">Add</string>
+    <string name="create">Create</string>
+    <string name="clear_all">Clear all</string>
+
+    <string name="enter_valid_title">Please enter a valid Title</string>
+    <string name="enter_valid_distance">Please enter a valid Distance</string>
+    <string name="enter_valid_date">Please enter a valid Date</string>
+    <string name="enter_valid_time">Please enter a valid Time</string>
+    <string name="enter_valid_address">Please enter a valid Address</string>
+    <string name="hint_max_participants">If keep the field empty your tournament will have no limit number of participants</string>
+    <string name="select_from_map">Select from the Map</string>
+
+    <string name="please_select_address">Please select the Address</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="tournament_cover">Tournament Cover</string>
+    <string name="remove_image">Remove Image</string>
+    <string name="sponsor_name">Sponsor Name</string>
+    <string name="select_image">Select Image</string>
+    <string name="uploading_tournament">Uploading Tournament...</string>
+
+
 
     <string-array name="security_question">
         <item>Please Select a security Question</item>

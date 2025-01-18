@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sprintleague.AccountManager;
+import com.example.sprintleague.CreateTournamentActivity;
 import com.example.sprintleague.LoginActivity;
 import com.example.sprintleague.R;
 import com.example.sprintleague.SignupActivity;
@@ -114,7 +115,8 @@ public class AccountFragment extends Fragment {
 
 
         createTour.setOnClickListener(view -> {
-            Toast.makeText(getContext(),R.string.add_tournament,Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(),R.string.add_tournament,Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getContext(), CreateTournamentActivity.class));
         });
 
 
