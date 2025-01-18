@@ -26,4 +26,20 @@ public class StringsValidationMethods {
         //return Pattern.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", password);
         return Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z\\d]).{6,30}$", password);
     }
+
+    protected boolean isValidTournamentTitle(String title){
+        return Pattern.matches("^[a-zA-Z0-9 ]+$", title);
+    }
+
+    protected boolean isValidStreetAddress(String address){
+        return Pattern.matches("^[\\p{L}\\p{N} ,.\\-]+$", address);
+    }
+
+    protected boolean isValidPostalCode(String postalcode){
+        return Pattern.matches("^\\d{2}-\\d{3}$", postalcode);
+    }
+
+    protected boolean isValidCityName(String cityName){
+        return Pattern.matches("^[\\p{L} ,.\\'-]+$", cityName);
+    }
 }
