@@ -188,6 +188,13 @@ public class SetNewPasswordFragment extends Fragment{
 
         currentUser = null;
 
+        if(AccountManager.currentUser != null){
+            AccountManager.currentUser.setPassword(newpassword);
+            AccountManager accountManager = new AccountManager(getContext());
+
+            accountManager.saveString("userPassword", newpassword);
+        }
+
         Toast.makeText(getContext(), "Password updated successfully!", Toast.LENGTH_SHORT).show();
 
         if (callback != null) {

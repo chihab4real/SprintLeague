@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import com.example.sprintleague.SignupActivity;
 import com.example.sprintleague.User;
 import com.example.sprintleague.databinding.FragmentAccountBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import org.checkerframework.checker.units.qual.A;
 
@@ -37,6 +39,8 @@ public class AccountFragment extends Fragment {
 
 
     private RelativeLayout login_click, signup_clik;
+
+    private ImageView profile_pic;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -64,6 +68,8 @@ public class AccountFragment extends Fragment {
         createTour = root.findViewById(R.id.account_create_tour_layout);
         myTour = root.findViewById(R.id.account_my_tour_layout);
 
+        profile_pic = root.findViewById(R.id.profile_pic);
+
         if(AccountManager.currentUser != null){
             user_logged_in_layout.setVisibility(View.VISIBLE);
             logout_clik.setVisibility(View.VISIBLE);
@@ -71,7 +77,16 @@ public class AccountFragment extends Fragment {
 
             userFirstName.setText(AccountManager.currentUser.getFirstName());
             userLastName.setText(AccountManager.currentUser.getLastName());
+
+            if(!AccountManager.currentUser.getProfilePic().isEmpty()){
+                Picasso.get()
+                        .load(AccountManager.currentUser.getProfilePic())
+                        .into(profile_pic);
+            }else{
+                profile_pic.setImageResource(R.drawable.empty_profile_pic);
+            }
         }else{
+
             user_logged_in_layout.setVisibility(View.GONE);
             logout_clik.setVisibility(View.GONE);
             user_not_logged_in_layout.setVisibility(View.VISIBLE);
@@ -101,7 +116,7 @@ public class AccountFragment extends Fragment {
         });
 
         editMyAccount.setOnClickListener(view -> {
-            Toast.makeText(getContext(),R.string.edit_account_details,Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(root.getContext(), EditMyAccountActivity.class));
         });
 
         upcomingTour.setOnClickListener(view -> {
@@ -164,6 +179,15 @@ public class AccountFragment extends Fragment {
 
             userFirstName.setText(AccountManager.currentUser.getFirstName());
             userLastName.setText(AccountManager.currentUser.getLastName());
+
+
+            if(!AccountManager.currentUser.getProfilePic().isEmpty()){
+                Picasso.get()
+                        .load(AccountManager.currentUser.getProfilePic())
+                        .into(profile_pic);
+            }else{
+                profile_pic.setImageResource(R.drawable.empty_profile_pic);
+            }
         }else{
             user_logged_in_layout.setVisibility(View.GONE);
             logout_clik.setVisibility(View.GONE);

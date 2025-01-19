@@ -108,7 +108,12 @@
     <string name="sponsor_name">Sponsor Name</string>
     <string name="select_image">Select Image</string>
     <string name="uploading_tournament">Uploading Tournament...</string>
+    <string name="edit_my_account">Edit my Account</string>
+    <string name="old_password">Current Password</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="new_password">New Password</string>
 
+    <string name="old_pass_not_correct">New Password</string>
 
 
     <string-array name="security_question">
