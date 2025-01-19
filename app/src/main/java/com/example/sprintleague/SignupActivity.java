@@ -213,7 +213,7 @@ public class SignupActivity extends AppCompatActivity  {
     }
 
     private void createUserDataBase(String id, String firstName, String lastName, String email, String password, String question, String answer) {
-        User user = new User(id, email, firstName, lastName, password, "", false, question,answer, "");
+        User user = new User(id, email, firstName, lastName, password, "", false, question,answer,0);
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference();

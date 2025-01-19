@@ -15,14 +15,14 @@ public class User {
 
 
 
-    private String Ranking;
+    private double ranking;
 
 
 
     public User() {
     }
 
-    public User(String id, String email, String firstName, String lastName, String password, String profilePic, boolean isActive, String securityQuestion, String securityQuestionResponse,String ranking) {
+    public User(String id, String email, String firstName, String lastName, String password, String profilePic, boolean isActive, String securityQuestion, String securityQuestionResponse,double ranking) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
@@ -33,7 +33,7 @@ public class User {
         this.securityQuestion = securityQuestion;
         this.securityQuestionResponse = securityQuestionResponse;
 
-        this.Ranking = ranking;
+        this.ranking = ranking;
     }
 
 
@@ -110,11 +110,11 @@ public class User {
         this.securityQuestionResponse = securityQuestionResponse;
     }
 
-    public String getRanking() {
-        return Ranking;
+    public double getRanking() {
+        return ranking;
     }
 
-    public void setRanking(String ranking) {
-        Ranking = ranking;
+    public void setRanking(double ranking) {
+        this.ranking = ranking;
     }
 }

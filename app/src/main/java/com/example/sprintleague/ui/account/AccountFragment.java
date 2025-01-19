@@ -31,7 +31,7 @@ public class AccountFragment extends Fragment {
 
     private FragmentAccountBinding binding;
 
-    private TextView userFirstName, userLastName;
+    private TextView userFirstName, userLastName, userRank;
     private RelativeLayout logout_clik;
     private LinearLayout user_logged_in_layout, user_not_logged_in_layout;
 
@@ -68,6 +68,8 @@ public class AccountFragment extends Fragment {
         createTour = root.findViewById(R.id.account_create_tour_layout);
         myTour = root.findViewById(R.id.account_my_tour_layout);
 
+        userRank = root.findViewById(R.id.account_user_rank);
+
         profile_pic = root.findViewById(R.id.profile_pic);
 
         if(AccountManager.currentUser != null){
@@ -77,6 +79,8 @@ public class AccountFragment extends Fragment {
 
             userFirstName.setText(AccountManager.currentUser.getFirstName());
             userLastName.setText(AccountManager.currentUser.getLastName());
+
+            userRank.setText(getResources().getString(R.string.rank)+": "+String.valueOf(AccountManager.currentUser.getRanking()));
 
             if(!AccountManager.currentUser.getProfilePic().isEmpty()){
                 Picasso.get()
