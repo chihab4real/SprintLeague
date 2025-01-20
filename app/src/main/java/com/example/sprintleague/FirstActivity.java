@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -56,12 +57,14 @@ public class FirstActivity extends AppCompatActivity {
 
 
 
+        getAllTournaments();
 
         if (isUserDataSaved(email, password, id)) {
 
+
             autoLoginUser(email, password, id);
         }else{
-            startActivity(new Intent(FirstActivity.this, MainMenuActivity.class));
+           // startActivity(new Intent(FirstActivity.this, MainMenuActivity.class));
         }
     }
 
@@ -86,19 +89,19 @@ public class FirstActivity extends AppCompatActivity {
                             if(user.isEmailVerified()){
                                 getUserFromDataBase(user.getUid());
 
-                                startActivity(new Intent(FirstActivity.this, MainMenuActivity.class));
-                                finish();
+                                //startActivity(new Intent(FirstActivity.this, MainMenuActivity.class));
+                                //finish();
                             }else{
-                                startActivity(new Intent(FirstActivity.this, MainMenuActivity.class));
-                                finish();
+                                //startActivity(new Intent(FirstActivity.this, MainMenuActivity.class));
+                                //finish();
                             }
 
                             //updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            startActivity(new Intent(FirstActivity.this, MainMenuActivity.class));
-                            finish();
+                            //startActivity(new Intent(FirstActivity.this, MainMenuActivity.class));
+                            //finish();
                             //
                             //updateUI(null);
                         }
@@ -131,6 +134,38 @@ public class FirstActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void getAllTournaments(){
+        DatabaseReference databaseReference;
+        databaseReference = FirebaseDatabase.getInstance().getReference("Tournaments");
+
+        ArrayList<Tournament> tournaments = new ArrayList<>();
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                tournaments.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Tournament tournament = dataSnapshot.getValue(Tournament.class);
+
+                    tournaments.add(tournament);
+
+                    if(tournaments.size() == snapshot.getChildrenCount()){
+                        Utils.tournaments = tournaments;
+                        startActivity(new Intent(FirstActivity.this, MainMenuActivity.class));
+                        finish();
+
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
 }

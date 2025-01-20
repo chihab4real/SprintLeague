@@ -3,7 +3,7 @@ package com.example.sprintleague;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 
-public class Tournament {
+public class Tournament  implements Comparable<Tournament>{
 
     private String ID;
     private String title;
@@ -136,6 +136,12 @@ public class Tournament {
 
     public void setID(String ID) {
         this.ID = ID;
+    }
+
+    @Override
+    public int compareTo(Tournament other) {
+        // Compare based on the DateTime field
+        return this.dateTime.compareTo(other.dateTime);
     }
 
 

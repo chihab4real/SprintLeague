@@ -6,10 +6,12 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
 
-        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimary">@color/solmon</item>
         <item name="colorPrimaryVariant">@color/solmon_dark</item>
 
         <item name="colorAccent">@color/solmon</item>
+
+
 
         <item name="fontFamily">@font/funnel_display</item>
 

@@ -1,6 +1,11 @@
 package com.example.sprintleague;
 
-public class DateTime {
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
+public class DateTime implements Comparable<DateTime>{
     private String year;
     private String month;
     private String day;
@@ -68,4 +73,38 @@ public class DateTime {
     public void setAm_pm(String am_pm) {
         this.am_pm = am_pm;
     }
+
+    @Override
+    public int compareTo(DateTime other) {
+        long thisMillis = convertToMilliseconds();
+        long otherMillis = other.convertToMilliseconds();
+        return Long.compare(thisMillis, otherMillis);
+    }
+
+    // Converts the DateTime to milliseconds
+    public long convertToMilliseconds() {
+        // Use 24-hour format for easier conversion
+        int hour24 = Integer.parseInt(this.hour);
+        if (this.am_pm.equals("PM") && hour24 < 12) {
+            hour24 += 12;  // Convert PM to 24-hour format
+        } else if (this.am_pm.equals("AM") && hour24 == 12) {
+            hour24 = 0;  // Convert 12 AM to 0 hours
+        }
+
+        String dateString = this.year + "-" + this.month + "-" + this.day + " " + hour24 + ":" + this.minute;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));  // Ensure we handle time zones correctly
+
+        try {
+            Date date = sdf.parse(dateString);
+            return date.getTime();  // Returns time in milliseconds
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+
+
 }
