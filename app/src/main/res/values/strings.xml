@@ -120,6 +120,17 @@
 
     <string name="old_pass_not_correct">New Password</string>
     <string name="sort_by">Sort by</string>
+    <string name="tournament">Tournament</string>
+    <string name="places_left">XX/YY left</string>
+    <string name="address">Address</string>
+    <string name="join">Join</string>
+    <string name="cant_join">No more empty spots</string>
+    <string name="login_first">You need to log in first to be able to join</string>
+    <string name="unlimted_places">Unlimited spots</string>
+    <string name="already_joined">You already joined this Tournament</string>
+    <string name="spots_left">Spots left</string>
+    <string name="edit_tournament">Edit Tournament</string>
+    <string name="enter_valid_number">Please add a valid number</string>
 
 
     <string-array name="security_question">

@@ -35,6 +35,9 @@ public class FirstActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
+    private DatabaseReference databaseReference;
+    private ValueEventListener valueEventListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,35 +140,43 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void getAllTournaments(){
-        DatabaseReference databaseReference;
         databaseReference = FirebaseDatabase.getInstance().getReference("Tournaments");
-
         ArrayList<Tournament> tournaments = new ArrayList<>();
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 tournaments.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Tournament tournament = dataSnapshot.getValue(Tournament.class);
-
                     tournaments.add(tournament);
 
-                    if(tournaments.size() == snapshot.getChildrenCount()){
+                    if (tournaments.size() == snapshot.getChildrenCount()) {
                         Utils.tournaments = tournaments;
+
                         startActivity(new Intent(FirstActivity.this, MainMenuActivity.class));
                         finish();
-
                     }
                 }
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                // Handle error here if needed
             }
-        });
+        };
+
+        databaseReference.addValueEventListener(valueEventListener);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Remove the ValueEventListener when the activity is destroyed
+        if (databaseReference != null && valueEventListener != null) {
+            databaseReference.removeEventListener(valueEventListener);
+        }
     }
 
 }

@@ -9,91 +9,114 @@
 
     tools:context=".ui.home.HomeFragment">
 
-
-
-    <LinearLayout
-
-        android:scrollbars="none"
-
-        android:layout_marginBottom="?actionBarSize"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <LinearLayout
+
             android:orientation="vertical"
+
+            android:background="@color/lightsolmon_black"
+
+            android:scrollbars="none"
+
+
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
 
 
-            <LinearLayout
 
-
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-                <TextView
-                    android:layout_weight="0.9"
-
-                    android:id="@+id/home_total_tournament"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-
-
-
-                    android:text="@string/n_tournamets"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                
-                
 
                 <LinearLayout
 
-                    android:orientation="vertical"
-                    android:layout_marginLeft="25dp"
 
-
-                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    
+
+
                     <TextView
-                        android:layout_marginTop="15dp"
-                        android:text="@string/sort_by"
-                        android:layout_width="wrap_content"
+                        android:layout_weight="0.9"
+
+                        android:id="@+id/home_total_tournament"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="20dp"
+
+
+
+                        android:text="@string/n_tournamets"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
-                    <Spinner
 
-                        android:id="@+id/sorting_spinner"
+
+                    <LinearLayout
+
+                        android:orientation="vertical"
+                        android:layout_marginLeft="25dp"
+
+
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="wrap_content">
 
-                       />
+                        <TextView
+                            android:layout_marginTop="15dp"
+                            android:text="@string/sort_by"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <Spinner
+
+                            android:id="@+id/sorting_spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            />
+                    </LinearLayout>
+
+
                 </LinearLayout>
+
+
+
+
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_layout"
+                android:layout_marginBottom="?actionBarSize"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <androidx.recyclerview.widget.RecyclerView
+
+                    android:hardwareAccelerated="true"
+
+
+
+
+                    android:paddingBottom="15dp"
+
+                    android:layout_gravity="center"
+                    android:scrollbars="none"
+
+                    android:id="@+id/recyclerview"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 
 
             </LinearLayout>
 
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                
-                android:divider="@android:color/transparent"
 
-                android:paddingBottom="15dp"
 
-                android:layout_gravity="center"
-                android:scrollbars="none"
 
-                android:id="@+id/recyclerview"
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </LinearLayout>
 
-    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

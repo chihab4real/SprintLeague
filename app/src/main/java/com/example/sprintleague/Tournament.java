@@ -18,11 +18,15 @@ public class Tournament  implements Comparable<Tournament>{
 
     private String tournamentCoverLink;
 
+    private ArrayList<String> attendingList;
+
+    private boolean lockedForEdit;
+
 
     public Tournament() {
     }
 
-    public Tournament(String id, String title, String organizerID, Float distance, DateTime dateTime, int maxParticipants, CustomeAddress address, ArrayList<Sponsor> sponsors, String coverlink) {
+    public Tournament(String id, String title, String organizerID, Float distance, DateTime dateTime, int maxParticipants, CustomeAddress address, ArrayList<Sponsor> sponsors, String coverlink, ArrayList<String> attendingList, boolean lockedForEdit) {
         this.ID = id;
         this.title = title;
         this.organizerID = organizerID;
@@ -30,41 +34,20 @@ public class Tournament  implements Comparable<Tournament>{
         this.dateTime = dateTime;
         this.maxParticipants = maxParticipants;
         this.address = address;
-        this.sponsors = sponsors;
+
+        this.attendingList = attendingList;
+
+        if(sponsors != null){
+            this.sponsors = sponsors;
+        }else{
+            this.sponsors = new ArrayList<>();
+        }
+
         this.tournamentCoverLink = coverlink;
+
+        this.lockedForEdit = lockedForEdit;
     }
 
-    public Tournament(String ID, String title, String organizerID, Float distance, DateTime dateTime, int maxParticipants, CustomeAddress address) {
-        this.ID = ID;
-        this.title = title;
-        this.organizerID = organizerID;
-        this.distance = distance;
-        this.dateTime = dateTime;
-        this.maxParticipants = maxParticipants;
-        this.address = address;
-    }
-
-    public Tournament(String ID, String title, String organizerID, Float distance, DateTime dateTime, int maxParticipants, CustomeAddress address, ArrayList<Sponsor> sponsors) {
-        this.ID = ID;
-        this.title = title;
-        this.organizerID = organizerID;
-        this.distance = distance;
-        this.dateTime = dateTime;
-        this.maxParticipants = maxParticipants;
-        this.address = address;
-        this.sponsors = sponsors;
-    }
-
-    public Tournament(String ID, String title, String organizerID, Float distance, DateTime dateTime, int maxParticipants, CustomeAddress address, String tournamentCoverLink) {
-        this.ID = ID;
-        this.title = title;
-        this.organizerID = organizerID;
-        this.distance = distance;
-        this.dateTime = dateTime;
-        this.maxParticipants = maxParticipants;
-        this.address = address;
-        this.tournamentCoverLink = tournamentCoverLink;
-    }
 
     public String getTitle() {
         return title;
@@ -145,4 +128,11 @@ public class Tournament  implements Comparable<Tournament>{
     }
 
 
+    public ArrayList<String> getAttendingList() {
+        return attendingList;
+    }
+
+    public void setAttendingList(ArrayList<String> attendingList) {
+        this.attendingList = attendingList;
+    }
 }

@@ -18,6 +18,12 @@
         android:theme="@style/Theme.SprintLeague"
         tools:targetApi="31">
         <activity
+            android:name=".EditTournamentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TournamentActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.account.EditMyAccountActivity"
             android:exported="false" />
 

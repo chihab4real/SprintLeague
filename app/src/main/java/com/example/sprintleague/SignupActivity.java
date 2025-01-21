@@ -26,6 +26,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 public class SignupActivity extends AppCompatActivity  {
 
     private EditText firstNameEditText, lastNameEditText, emailEditText, passwordEditText, secuirtyAnswer;
@@ -213,7 +215,7 @@ public class SignupActivity extends AppCompatActivity  {
     }
 
     private void createUserDataBase(String id, String firstName, String lastName, String email, String password, String question, String answer) {
-        User user = new User(id, email, firstName, lastName, password, "", false, question,answer,0);
+        User user = new User(id, email, firstName, lastName, password, "", false, question,answer,0, new ArrayList<>());
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
