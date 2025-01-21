@@ -1,5 +1,6 @@
 package com.example.sprintleague.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +18,22 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.sprintleague.DateTime;
+import com.example.sprintleague.FirstActivity;
+import com.example.sprintleague.MainMenuActivity;
 import com.example.sprintleague.R;
 import com.example.sprintleague.Tournament;
+import com.example.sprintleague.TournamentActivity;
 import com.example.sprintleague.Utils;
 import com.example.sprintleague.adapters.TournamentAdapter;
 import com.example.sprintleague.databinding.FragmentHomeBinding;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,13 +45,17 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerview;
 
-    private TournamentAdapter adapter;
+    private TournamentAdapter tournamentAdapter;
 
     private TextView totalTournaments;
     private Spinner sortingSpinner;
 
     private int sortByPosition = 0;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    private DatabaseReference databaseReference;
+    private ValueEventListener valueEventListener;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -55,6 +69,10 @@ public class HomeFragment extends Fragment {
         recyclerview = root.findViewById(R.id.recyclerview);
         totalTournaments = root.findViewById(R.id.home_total_tournament);
         sortingSpinner = root.findViewById(R.id.sorting_spinner);
+
+        swipeRefreshLayout = root.findViewById(R.id.swipe_layout);
+
+
 
         // Set the layout manager (LinearLayoutManager for a vertical list)
         recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -89,6 +107,48 @@ public class HomeFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
+            }
+        });
+
+
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                databaseReference = FirebaseDatabase.getInstance().getReference("Tournaments");
+                ArrayList<Tournament> tournaments = new ArrayList<>();
+
+                valueEventListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        tournaments.clear();
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            Tournament tournament = dataSnapshot.getValue(Tournament.class);
+                            tournaments.add(tournament);
+
+                            if (tournaments.size() == snapshot.getChildrenCount()) {
+                                Utils.tournaments = tournaments;
+
+                                swipeRefreshLayout.setRefreshing(false);
+
+                                if (databaseReference != null && valueEventListener != null) {
+                                    totalTournaments.setText(Utils.tournaments.size()+" "+getResources().getString(R.string.tournamets));
+                                    databaseReference.removeEventListener(valueEventListener);
+
+                                    sortTournaments();
+                                }
+
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // Handle error here if needed
+                    }
+                };
+
+                databaseReference.addValueEventListener(valueEventListener);
             }
         });
 
@@ -154,13 +214,28 @@ public class HomeFragment extends Fragment {
                 break;
         }
 
-        adapter = new TournamentAdapter(getContext(), sorted);
+        tournamentAdapter = new TournamentAdapter(getContext(), sorted, tournament -> {
 
 
-        recyclerview.setAdapter(adapter);
+            TournamentActivity.tournament = tournament;
+            startActivity(new Intent(getContext(),TournamentActivity.class));
+        });
+
+
+//        recyclerview.setNestedScrollingEnabled(false);
+//        recyclerview.setItemViewCacheSize(20);
+//        recyclerview.setDrawingCacheEnabled(true);
+//        recyclerview.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+
+        recyclerview.setAdapter(tournamentAdapter);
 
 
     }
+
+
+
+
+
 
 
 

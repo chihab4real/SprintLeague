@@ -15,6 +15,7 @@ import com.example.sprintleague.AccountManager;
 import com.example.sprintleague.R;
 import com.example.sprintleague.Tournament;
 import com.example.sprintleague.User;
+import com.example.sprintleague.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,11 +29,13 @@ public class TournamentAdapter extends RecyclerView.Adapter<TournamentAdapter.To
 
     private Context context;
     private ArrayList<Tournament> tournamentList;
+    private OnItemClickListener listener;
 
 
-    public TournamentAdapter(Context context, ArrayList<Tournament> tournamentList) {
+    public TournamentAdapter(Context context, ArrayList<Tournament> tournamentList,  OnItemClickListener listener) {
         this.context = context;
         this.tournamentList = tournamentList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -90,11 +93,19 @@ public class TournamentAdapter extends RecyclerView.Adapter<TournamentAdapter.To
         holder.titleText.setText(tournament.getTitle());
         holder.distanceText.setText(String.valueOf(tournament.getDistance())+" Km");
         String date_ = tournament.getDateTime().getDay()+"/"+tournament.getDateTime().getMonth()+"/"+tournament.getDateTime().getYear();
+
         String time_ = tournament.getDateTime().getHour()+":"+tournament.getDateTime().getMinute()+" "+tournament.getDateTime().getAm_pm();
+        if(Utils.is24HourFormat(context)){
+
+
+            time_ = Utils.convert12HourTo24Hour(time_);
+        }
         holder.dateTimeText.setText(date_+", "+time_);
 
 //        profilePic.setImageResource(tournament.getProfilePicResId());
 
+
+        holder.itemView.setOnClickListener(v -> listener.onItemClick(tournament));
 
 
     }
@@ -106,6 +117,9 @@ public class TournamentAdapter extends RecyclerView.Adapter<TournamentAdapter.To
 
 
 
+    public interface OnItemClickListener {
+        void onItemClick(Tournament tournament);
+    }
 
     // ViewHolder class for efficient view recycling
     public static class TournamentViewHolder extends RecyclerView.ViewHolder {

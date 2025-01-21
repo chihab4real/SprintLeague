@@ -26,6 +26,7 @@
             android:layout_height="30dp"/>
 
         <TextView
+            android:id="@+id/activity_title"
             android:layout_marginLeft="15dp"
             android:textSize="20sp"
             android:layout_gravity="center"
@@ -519,6 +520,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
+            <TextView
+
+                android:visibility="gone"
+                android:id="@+id/text_view_enter_valid_max_part"
+                android:textStyle="bold"
+                android:textColor="@color/error_red"
+                android:text="@string/enter_valid_number"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+
 
 
             <LinearLayout
@@ -880,6 +895,7 @@
                     android:layout_height="wrap_content">
 
                     <LinearLayout
+
                         android:id="@+id/add_tournament_sponsor_add"
                         android:background="?android:attr/selectableItemBackground"
                         android:gravity="center"
@@ -1011,6 +1027,7 @@
                         <TextView
 
 
+                            android:id="@+id/tournament_create_save_text"
 
                             android:textStyle="bold"
                             android:textSize="15sp"
@@ -1025,6 +1042,8 @@
 
 
                 </LinearLayout>
+
+
 
             </LinearLayout>
 

@@ -1,5 +1,7 @@
 package com.example.sprintleague;
 
+import java.util.ArrayList;
+
 public class User {
 
     private String id;
@@ -13,6 +15,8 @@ public class User {
     private String securityQuestion;
     private String securityQuestionResponse;
 
+    private ArrayList<String> attendingTournaments;
+
 
 
     private double ranking;
@@ -22,7 +26,7 @@ public class User {
     public User() {
     }
 
-    public User(String id, String email, String firstName, String lastName, String password, String profilePic, boolean isActive, String securityQuestion, String securityQuestionResponse,double ranking) {
+    public User(String id, String email, String firstName, String lastName, String password, String profilePic, boolean isActive, String securityQuestion, String securityQuestionResponse,double ranking, ArrayList<String> attendingTournaments) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
@@ -34,6 +38,8 @@ public class User {
         this.securityQuestionResponse = securityQuestionResponse;
 
         this.ranking = ranking;
+
+        this.attendingTournaments = attendingTournaments;
     }
 
 
@@ -116,5 +122,13 @@ public class User {
 
     public void setRanking(double ranking) {
         this.ranking = ranking;
+    }
+
+    public ArrayList<String> getAttendingTournaments() {
+        return attendingTournaments;
+    }
+
+    public void setAttendingTournaments(ArrayList<String> attendingTournaments) {
+        this.attendingTournaments = attendingTournaments;
     }
 }

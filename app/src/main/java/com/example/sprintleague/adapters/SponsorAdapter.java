@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sprintleague.R;
 import com.example.sprintleague.Sponsor;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -42,7 +43,12 @@ public class SponsorAdapter extends RecyclerView.Adapter<SponsorAdapter.SponsorV
     public void onBindViewHolder(@NonNull SponsorViewHolder holder, int position) {
         Sponsor sponsor = sponsors.get(position);
         holder.sponsorName.setText(sponsor.getSponsorName());
-        holder.sponsorImage.setImageURI(sponsor.getSponsorImgUri());
+        if(sponsor.getSponsorImgLink() != null && !sponsor.getSponsorImgLink().isEmpty()){
+            Picasso.get().load(sponsor.getSponsorImgLink()).into(holder.sponsorImage);
+        }else{
+            holder.sponsorImage.setImageURI(sponsor.getSponsorImgUri());
+        }
+
 
         holder.deleteButton.setOnClickListener(v -> {
             if (deleteListener != null) {

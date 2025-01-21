@@ -3,6 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="pumpkin">#EE7B30</color>
+    <color name="gray">#BDBDBD</color>
+
+    <color name="faded_solmon">#6DFD8270</color>
 
 
     <color name="solmon">#fd8270</color>
@@ -30,6 +33,8 @@
 
     <color name="solmon_mixed_black">#fd8270</color>
     <color name="mixed_white_mixed_black">#FFFDF6FE</color>
+
+
 
 
 
