@@ -7,6 +7,8 @@
     <color name="solmon_variant">#ca6859</color>
     <color name="solmon_dark">#190d0b</color>
 
+    <color name="faded_solmon">#6DFD8270</color>
+
 
 
 
@@ -38,7 +40,7 @@
     <color name="solmon_black">#FF000000</color>
     <color name="solmon_white">#FFFFFF</color>
 
-
+    <color name="lightsolmon_black">#FF000000</color>
 
 
 
@@ -58,4 +60,6 @@
     <color name="lightsolmon_darkgray">#181818</color>
 
     <color name="blue_white">#FFFFFFFF</color>
+    <color name="solmon_mixed_black">#FF141218</color>
+    <color name="mixed_white_mixed_black">#FF141218</color>
 </resources>

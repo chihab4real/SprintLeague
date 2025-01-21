@@ -38,6 +38,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sprintleague.adapters.SponsorAdapter;
+import com.example.sprintleague.adapters.TournamentSponsorAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -45,6 +46,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import org.checkerframework.checker.units.qual.A;
 import org.w3c.dom.Text;
@@ -68,9 +70,9 @@ public class CreateTournamentActivity extends AppCompatActivity {
     private RecyclerView sponsorRecyclerView;
     private ImageView tournamentCover;
     private boolean coverLoaded = false;
-    private TextView removeTournament;
+    private TextView removeTournamentCover;
 
-    private TextView valid_title, valid_distance, valid_date, valid_time, hint_max_participants, valid_address;
+    private TextView valid_title, valid_distance, valid_date, valid_time, hint_max_participants, valid_address, valid_max_part;
     private TextView open_map;
     private StringsValidationMethods validator;
     private Calendar currentCalendar, selectedCalendar;
@@ -90,6 +92,13 @@ public class CreateTournamentActivity extends AppCompatActivity {
     private FirebaseStorage storage;
 
     private ImageView go_back;
+
+    private boolean isEditMode;
+
+    private TextView activity_title, create_save_text;
+
+
+    public static Tournament tournamentToEdit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,16 +106,11 @@ public class CreateTournamentActivity extends AppCompatActivity {
         validator = new StringsValidationMethods();
 
 
+        isEditMode = getIntent().getBooleanExtra("isEditMode", false);
+
         initViews();
 
 
-//        EdgeToEdge.enable(this);
-//
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-//            return insets;
-//        });
 
         organizerEditText.setText(AccountManager.currentUser.getFirstName()+" "+ AccountManager.currentUser.getLastName());
 
@@ -179,7 +183,7 @@ public class CreateTournamentActivity extends AppCompatActivity {
 
                 tournamentCover.setImageResource(R.drawable.ic_add_outline);
                 coverLoaded = false;
-                removeTournament.setVisibility(View.GONE);
+                removeTournamentCover.setVisibility(View.GONE);
 
                 sponsors.clear();
 
@@ -193,9 +197,28 @@ public class CreateTournamentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(isInputValid()){
 
-                    Toast.makeText(getApplicationContext(), "All good", Toast.LENGTH_SHORT).show();
-                    String id = AccountManager.generateAlphaNumericId(16);
-                    sendTournamentCoverToStorage(id);
+
+
+                    if(isEditMode){
+
+                        if(isInputValidEdit()){
+                            Toast.makeText(getApplicationContext(), "All good - EDIT", Toast.LENGTH_SHORT).show();
+
+//                            sendTournamentCoverToStorage(tournamentToEdit.getID());
+
+
+                            saveTournamentData(tournamentToEdit.getID(), tournamentToEdit.getTournamentCoverLink(), tournamentToEdit.getSponsors());
+                        }
+
+
+
+
+                    }else{
+                        Toast.makeText(getApplicationContext(), "All good", Toast.LENGTH_SHORT).show();
+                        String id = AccountManager.generateAlphaNumericId(16);
+                        sendTournamentCoverToStorage(id);
+                    }
+
                 }
             }
         });
@@ -203,38 +226,65 @@ public class CreateTournamentActivity extends AppCompatActivity {
         tournamentCover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openGallery();
+
+                if(!isEditMode){
+                    openGallery();
+                }else{
+                    Toast.makeText(getApplicationContext(), "You cant Change the cover", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
-        removeTournament.setOnClickListener(new View.OnClickListener() {
+        removeTournamentCover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 tournamentCover.setImageResource(R.drawable.ic_add_outline);
                 coverLoaded = false;
-                removeTournament.setVisibility(View.GONE);
+                removeTournamentCover.setVisibility(View.GONE);
             }
         });
 
         go_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DatabaseReference lockRef = FirebaseDatabase.getInstance().getReference("Tournaments").child(tournamentToEdit.getID());
+
+                lockRef.child("lockedForEdit").setValue(false);
                 finish();
             }
         });
 
 
-        // In onCreate, replace your existing RecyclerView initialization with:
-        sponsorRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        sponsorAdapter = new SponsorAdapter(this, sponsors, position -> {
-            // Let the adapter handle the removal
-            sponsorAdapter.removeSponsor(position);
-        });
-        sponsorRecyclerView.setAdapter(sponsorAdapter);
+
+        if(isEditMode){
+            sponsorRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            TournamentSponsorAdapter tournamentSponsorAdapter;
+            tournamentSponsorAdapter = new TournamentSponsorAdapter(getApplicationContext(), sponsors);
+
+            sponsorRecyclerView.setAdapter(tournamentSponsorAdapter);
+        }else{
+            // In onCreate, replace your existing RecyclerView initialization with:
+            sponsorRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            sponsorAdapter = new SponsorAdapter(this, sponsors, position -> {
+                // Let the adapter handle the removal
+                sponsorAdapter.removeSponsor(position);
+            });
+            sponsorRecyclerView.setAdapter(sponsorAdapter);
+        }
+
 
 // Modify your existing addSponsor click listener
-        addSponsor.setOnClickListener(view -> showAddSponsorDialog());
+        addSponsor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                if(!isEditMode){
+                    showAddSponsorDialog();
+                }
+
+            }
+        });
     }
 
 
@@ -268,11 +318,67 @@ public class CreateTournamentActivity extends AppCompatActivity {
         valid_time = findViewById(R.id.text_view_enter_valid_time);
         hint_max_participants = findViewById(R.id.hint_max_participants);
         valid_address = findViewById(R.id.text_view_enter_valid_addresse);
+        valid_max_part = findViewById(R.id.text_view_enter_valid_max_part);
         open_map = findViewById(R.id.add_tournament_open_map);
 
         tournamentCover = findViewById(R.id.tournament_cover);
-        removeTournament = findViewById(R.id.remove_tournament_cover);
+        removeTournamentCover = findViewById(R.id.remove_tournament_cover);
         go_back = findViewById(R.id.go_back);
+
+        activity_title = findViewById(R.id.activity_title);
+        create_save_text = findViewById(R.id.tournament_create_save_text);
+
+        if(isEditMode){
+
+            addSponsor.setVisibility(View.GONE);
+            activity_title.setText(getString(R.string.edit_tournament));
+            create_save_text.setText(getString(R.string.save));
+
+
+            titleEditText.setText(tournamentToEdit.getTitle());
+            distanceEditText.setText(tournamentToEdit.getDistance()+"");
+
+            dateEditText.setText(tournamentToEdit.getDateTime().getYear()+"-"+tournamentToEdit.getDateTime().getMonth()+"-"+tournamentToEdit.getDateTime().getDay());
+
+            String time = tournamentToEdit.getDateTime().getHour()+":"+tournamentToEdit.getDateTime().getMinute() +" "+tournamentToEdit.getDateTime().getAm_pm();
+
+            if(Utils.is24HourFormat(this)){
+                time = Utils.convert12HourTo24Hour(time);
+            }
+
+            timeEditText.setText(time);
+
+            if(tournamentToEdit.getMaxParticipants() != -1){
+                max_participantsEditText.setText(tournamentToEdit.getMaxParticipants()+"");
+            }
+
+
+            cityEditText.setText(tournamentToEdit.getAddress().getCity());
+            postalCodeEditText.setText(tournamentToEdit.getAddress().getPostalCode());
+            streetEditText.setText(tournamentToEdit.getAddress().getStreet());
+            countryEditText.setText(tournamentToEdit.getAddress().getCountry());
+
+
+            if(!tournamentToEdit.getTournamentCoverLink().isEmpty()){
+                Picasso.get().load(tournamentToEdit.getTournamentCoverLink()).into(tournamentCover);
+                removeTournamentCover.setVisibility(View.GONE);
+                coverLoaded = true;
+
+            }else{
+                removeTournamentCover.setVisibility(View.GONE);
+                tournamentCover.setImageResource(R.drawable.ic_add_outline);
+                coverLoaded = false;
+            }
+
+            if(tournamentToEdit.getSponsors() != null && !tournamentToEdit.getSponsors().isEmpty()){
+                sponsors = tournamentToEdit.getSponsors();
+            }
+
+
+        }else{
+            activity_title.setText(getString(R.string.add_tournament));
+            create_save_text.setText(getString(R.string.create));
+        }
 
 
 
@@ -283,6 +389,7 @@ public class CreateTournamentActivity extends AppCompatActivity {
         String distance = distanceEditText.getText().toString();
         String date = dateEditText.getText().toString();
         String time = timeEditText.getText().toString();
+        String maxP = max_participantsEditText.getText().toString();
 
 
         String city = cityEditText.getText().toString();
@@ -293,7 +400,7 @@ public class CreateTournamentActivity extends AppCompatActivity {
         if(validator.isValidTournamentTitle(title)){
             valid_title.setVisibility(View.GONE);
 
-            if(!distance.isEmpty()){
+            if(!distance.isEmpty() && !distance.equals("0")){
                 valid_distance.setVisibility(View.GONE);
 
                 if(!date.isEmpty()){
@@ -302,13 +409,22 @@ public class CreateTournamentActivity extends AppCompatActivity {
                     if(!time.isEmpty()){
                         valid_time.setVisibility(View.GONE);
 
-                        if(validator.isValidCityName(city) && validator.isValidPostalCode(postal_code) && validator.isValidStreetAddress(street) && validator.isValidCityName(country)){
-                            valid_address.setVisibility(View.GONE);
+                        if(!maxP.equals("0")){
+                            valid_max_part.setVisibility(View.GONE);
 
-                            return true;
+                            if(validator.isValidCityName(city) && validator.isValidPostalCode(postal_code) && validator.isValidStreetAddress(street) && validator.isValidCityName(country)){
+                                valid_address.setVisibility(View.GONE);
+
+                                return true;
+                            }else{
+                                valid_address.setVisibility(View.VISIBLE);
+                            }
+
                         }else{
-                            valid_address.setVisibility(View.VISIBLE);
+                            valid_max_part.setVisibility(View.VISIBLE);
                         }
+
+
                     }else{
                         valid_time.setVisibility(View.VISIBLE);
                     }
@@ -369,7 +485,7 @@ public class CreateTournamentActivity extends AppCompatActivity {
         boolean isCurrentDay = isSameDay(currentCalendar, selectedCalendar);
 
         // Check if the device uses 24-hour format
-        boolean is24HourFormat = android.text.format.DateFormat.is24HourFormat(this);
+        boolean is24HourFormat = Utils.is24HourFormat(this);
 
         // Create TimePickerDialog based on the format
         TimePickerDialog timePickerDialog = new TimePickerDialog(CreateTournamentActivity.this, new TimePickerDialog.OnTimeSetListener() {
@@ -392,6 +508,7 @@ public class CreateTournamentActivity extends AppCompatActivity {
 
         timePickerDialog.show();
     }
+
 
     private boolean isSameDay(Calendar calendar1, Calendar calendar2) {
         return calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR)
@@ -429,7 +546,7 @@ public class CreateTournamentActivity extends AppCompatActivity {
                 // Set the selected image to the ImageView
                 tournamentCover.setImageURI(selectedImageUri);
                 coverLoaded = true;
-                removeTournament.setVisibility(View.VISIBLE);
+                removeTournamentCover.setVisibility(View.VISIBLE);
             } else {
                 Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
             }
@@ -529,6 +646,7 @@ public class CreateTournamentActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 
+
         if(coverLoaded){
             String folder = "Tournaments/" + tournamentID + "/Cover/";
             StorageReference tournamentRef = storageRef.child(folder + "cover.jpg");
@@ -609,7 +727,11 @@ public class CreateTournamentActivity extends AppCompatActivity {
     private void saveTournamentData(String tournamentID, String coverUrl, ArrayList<Sponsor> sponsors) {
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Tournaments").child(tournamentID);
 
-        String[] time = timeEditText.getText().toString().split(" ");
+        String textFromTimeEditText = timeEditText.getText().toString();
+        if(Utils.is24HourFormat(this)){
+            textFromTimeEditText = Utils.convert24HourTo12Hour(textFromTimeEditText);
+        }
+        String[] time = textFromTimeEditText.split(" ");
         String[] date = dateEditText.getText().toString().split("-");
 
         int max;
@@ -635,7 +757,11 @@ public class CreateTournamentActivity extends AppCompatActivity {
                         streetEditText.getText().toString(),
                         countryEditText.getText().toString()),
                 sponsors,
-                coverUrl);
+                coverUrl, new ArrayList<>(), false);
+
+
+
+
 
 
 
@@ -643,8 +769,13 @@ public class CreateTournamentActivity extends AppCompatActivity {
         databaseRef.setValue(tournament).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Toast.makeText(getApplicationContext(), "Tournament created successfully!", Toast.LENGTH_SHORT).show();
-                waiting_dialog.dismiss();
+                if(isEditMode){
+                    Toast.makeText(getApplicationContext(), "Tournament updated successfully!", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getApplicationContext(), "Tournament created successfully!", Toast.LENGTH_SHORT).show();
+                    waiting_dialog.dismiss();
+                }
+
                 finish();
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -659,6 +790,37 @@ public class CreateTournamentActivity extends AppCompatActivity {
 
 
     }
+
+
+    private boolean isInputValidEdit(){
+
+        String maxEdited = max_participantsEditText.getText().toString();
+
+        if(maxEdited.isEmpty()){
+            return true;
+        }else{
+
+            int max = Integer.parseInt(maxEdited);
+
+            if(tournamentToEdit.getAttendingList() != null && !tournamentToEdit.getAttendingList().isEmpty()){
+
+                if(max >= tournamentToEdit.getAttendingList().size()){
+                    return true;
+                }else{
+                    return false;
+                }
+
+            }else{
+                return  true;
+            }
+
+        }
+
+
+    }
+
+
+
 
 
 

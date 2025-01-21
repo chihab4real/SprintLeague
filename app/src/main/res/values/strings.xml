@@ -99,6 +99,11 @@
     <string name="enter_valid_address">Please enter a valid Address</string>
     <string name="hint_max_participants">If keep the field empty your tournament will have no limit number of participants</string>
     <string name="select_from_map">Select from the Map</string>
+    <string name="filter_by">Filter by</string>
+    <string name="date_time">Date, Time</string>
+    <string name="distance_example">10KM</string>
+    <string name="n_tournamets"><b>XX</b> Tournament</string>
+    <string name="tournamets">Tournament</string>
 
     <string name="please_select_address">Please select the Address</string>
     <string name="save">Save</string>
@@ -114,6 +119,18 @@
     <string name="new_password">New Password</string>
 
     <string name="old_pass_not_correct">New Password</string>
+    <string name="sort_by">Sort by</string>
+    <string name="tournament">Tournament</string>
+    <string name="places_left">XX/YY left</string>
+    <string name="address">Address</string>
+    <string name="join">Join</string>
+    <string name="cant_join">No more empty spots</string>
+    <string name="login_first">You need to log in first to be able to join</string>
+    <string name="unlimted_places">Unlimited spots</string>
+    <string name="already_joined">You already joined this Tournament</string>
+    <string name="spots_left">Spots left</string>
+    <string name="edit_tournament">Edit Tournament</string>
+    <string name="enter_valid_number">Please add a valid number</string>
 
 
     <string-array name="security_question">
@@ -123,6 +140,15 @@
         <item>What was the name of your first school?</item>
         <item>What is the name of the street you grew up on?</item>
         <item>What was the name of your first boss?</item>
+    </string-array>
+
+    <string-array name="sorting">
+        <item>Default</item>
+        <item>Distance: <b>Ascending</b></item>
+        <item>Distance: <b>descending</b></item>
+        <item>Date: <b>(Soonest First)</b></item>
+        <item>Date: <b>(Latest  First)</b></item>
+
     </string-array>
     <string name="title_activity_main_menu">MainMenuActivity</string>
     <string name="title_home">Home</string>

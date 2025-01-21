@@ -9,8 +9,10 @@
 
 
 
-        <item name="colorPrimary">@color/solmon</item>
+        <item name="colorPrimary">@color/solmon_mixed_black</item>
         <item name="colorPrimaryVariant">@color/solmon_variant</item>
+
+
 
     </style>
 
