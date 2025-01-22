@@ -60,8 +60,54 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.cardview.widget.CardView
+                <LinearLayout
+
+
                     android:layout_marginTop="30dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <androidx.cardview.widget.CardView
+
+
+                        app:cardElevation="0dp"
+                        android:layout_marginLeft="15dp"
+                        android:elevation="0dp"
+                        app:cardCornerRadius="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:scaleType="centerCrop"
+                                android:id="@+id/tournament_profile_pic"
+                                android:src="@drawable/empty_profile_pic"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"/>
+                        </RelativeLayout>
+
+
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tournament_organizer"
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:text="@string/tournament_organizer"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_marginTop="20dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginLeft="15dp"
                     app:cardCornerRadius="20dp"
@@ -127,28 +173,83 @@
 
                 </LinearLayout>
 
-                <TextView
-
-                    android:id="@+id/tournament_date_time"
-
-                    android:layout_marginTop="5dp"
-                    android:layout_marginLeft="15dp"
-                    android:text="@string/date_time"
-                    android:textSize="15sp"
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="match_parent">
+
+                    <TextView
+
+                        android:id="@+id/tournament_date_time"
+
+                        android:layout_weight="0.2"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="15dp"
+                        android:text="@string/date_time"
+                        android:textSize="15sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+
+                        android:id="@+id/tournament_level"
+
+
+                        android:layout_weight="0.5"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textAlignment="textEnd"
+                        android:layout_marginRight="15dp"
+
+
+                        android:text="@string/level"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+
+
 
 
 
                 <TextView
                     android:id="@+id/tournament_places"
                     android:textSize="15sp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="15dp"
                     android:layout_marginRight="20dp"
                     android:textAlignment="textEnd"
                     android:text="@string/places_left"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                    android:gravity="end"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textColor="@color/gray"
+                        android:textSize="11sp"
+                        android:text="@string/deadline_to_join"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+
+                        android:id="@+id/tournament_date_time_deadline"
+
+
+                        android:layout_marginRight="15dp"
+                        android:text="@string/date_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
 
 
                 <TextView
@@ -435,6 +536,7 @@
 
 
 
+
                         android:textStyle="bold"
                         android:textSize="15sp"
                         android:textColor="@color/white"
@@ -530,7 +632,7 @@
 
         <LinearLayout
             android:gravity="center"
-            android:visibility="visible"
+            android:visibility="gone"
             android:orientation="vertical"
             android:id="@+id/already_joined_layout"
             android:layout_width="match_parent"
@@ -540,6 +642,41 @@
             <TextView
                 android:textAlignment="center"
                 android:text="@string/already_joined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:id="@+id/deadline_passed_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <TextView
+                android:textAlignment="center"
+                android:text="@string/deadline_passed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:gravity="center"
+            android:visibility="visible"
+            android:orientation="vertical"
+            android:id="@+id/level_notmatch_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <TextView
+                android:textAlignment="center"
+                android:text="@string/level_dont_match"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

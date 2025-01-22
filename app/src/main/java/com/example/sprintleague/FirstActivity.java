@@ -147,7 +147,13 @@ public class FirstActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 tournaments.clear();
+
+                if(snapshot.getChildrenCount() == 0){
+                    startActivity(new Intent(FirstActivity.this, MainMenuActivity.class));
+                    finish();
+                }
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
                     Tournament tournament = dataSnapshot.getValue(Tournament.class);
                     tournaments.add(tournament);
 
@@ -163,6 +169,7 @@ public class FirstActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Handle error here if needed
+
             }
         };
 

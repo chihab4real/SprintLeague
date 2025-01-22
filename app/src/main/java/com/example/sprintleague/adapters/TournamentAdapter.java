@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +31,7 @@ public class TournamentAdapter extends RecyclerView.Adapter<TournamentAdapter.To
     private Context context;
     private ArrayList<Tournament> tournamentList;
     private OnItemClickListener listener;
+    private ValueEventListener valueEventListener;
 
 
     public TournamentAdapter(Context context, ArrayList<Tournament> tournamentList,  OnItemClickListener listener) {
@@ -63,20 +65,32 @@ public class TournamentAdapter extends RecyclerView.Adapter<TournamentAdapter.To
         DatabaseReference mDatabase;
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(tournament.getOrganizerID());
 
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 User user = snapshot.getValue(User.class);
 
 
-                holder.organizerText.setText(user.getFirstName()+" "+user.getLastName());
-                if(user.getProfilePic().isEmpty()){
-                    holder.profilePic.setImageResource(R.drawable.empty_profile_pic);
+                if(user != null){
+                    holder.organizerText.setText(user.getFirstName()+" "+user.getLastName());
+                    if(user.getProfilePic().isEmpty()){
+                        holder.profilePic.setImageResource(R.drawable.empty_profile_pic);
 
-                }else{
-                    Picasso.get()
-                            .load(user.getProfilePic())
-                            .into(holder.profilePic);
+                    }else{
+                        Picasso.get()
+                                .load(user.getProfilePic())
+                                .into(holder.profilePic);
+                    }
+
+                    if (mDatabase != null && valueEventListener != null) {
+
+                        mDatabase.removeEventListener(valueEventListener);
+                    }
+
+
+
                 }
 
 
@@ -87,20 +101,30 @@ public class TournamentAdapter extends RecyclerView.Adapter<TournamentAdapter.To
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        };
+
+        mDatabase.addValueEventListener(valueEventListener);
+
 
 
         holder.titleText.setText(tournament.getTitle());
         holder.distanceText.setText(String.valueOf(tournament.getDistance())+" Km");
+
         String date_ = tournament.getDateTime().getDay()+"/"+tournament.getDateTime().getMonth()+"/"+tournament.getDateTime().getYear();
+        String date_deadline = tournament.getJoinDeadline().getDay()+"/"+tournament.getJoinDeadline().getMonth()+"/"+tournament.getJoinDeadline().getYear();
 
         String time_ = tournament.getDateTime().getHour()+":"+tournament.getDateTime().getMinute()+" "+tournament.getDateTime().getAm_pm();
+        String time_deadline = tournament.getJoinDeadline().getHour()+":"+tournament.getJoinDeadline().getMinute()+" "+tournament.getJoinDeadline().getAm_pm();
+
         if(Utils.is24HourFormat(context)){
 
 
             time_ = Utils.convert12HourTo24Hour(time_);
+            time_deadline = Utils.convert12HourTo24Hour(time_deadline);
         }
+
         holder.dateTimeText.setText(date_+", "+time_);
+        holder.dateTimeDeadlineText.setText(date_deadline+", "+time_deadline);
 
 //        profilePic.setImageResource(tournament.getProfilePicResId());
 
@@ -124,7 +148,7 @@ public class TournamentAdapter extends RecyclerView.Adapter<TournamentAdapter.To
     // ViewHolder class for efficient view recycling
     public static class TournamentViewHolder extends RecyclerView.ViewHolder {
 
-        TextView titleText, dateTimeText, organizerText, distanceText;
+        TextView titleText, dateTimeText, organizerText, distanceText,dateTimeDeadlineText;
         ImageView coverImage,profilePic;
 
         public TournamentViewHolder(@NonNull View itemView) {
@@ -133,6 +157,7 @@ public class TournamentAdapter extends RecyclerView.Adapter<TournamentAdapter.To
             titleText = itemView.findViewById(R.id.tournament_item_title);
             distanceText = itemView.findViewById(R.id.tournament_item_distance);
             dateTimeText = itemView.findViewById(R.id.tournament_item_date_time);
+            dateTimeDeadlineText = itemView.findViewById(R.id.tournament_item_date_time_deadline);
              profilePic = itemView.findViewById(R.id.tournament_item_profile_pic);
              organizerText = itemView.findViewById(R.id.tournament_item_organizer);
         }

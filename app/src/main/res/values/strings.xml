@@ -28,7 +28,7 @@
     <string name="enter_valid_password">Please enter a valid Password</string>
     <string name="enter_valid_age">Please enter a valid Age</string>
     <string name="not_supported_yet">Not supported yet</string>
-    <string name="password_requirements">Your password must contain at least one lowercase letter, one uppercase letter, one numeric digit, one special character, and be between 6 and 30 characters long.</string>
+    <string name="password_requirements"><b>Your password must contain:</b>\n&#8226;\tAt least one lowercase letter.\n&#8226;\tOne uppercase letter.\n&#8226;\tOne numeric digit.\n&#8226;\tOne special character.\n&#8226;\tAnd be between 6 and 30 characters long.</string>
     <string name="login_failed">Login failed. Please check your email and password and try again.</string>
     <string name="title_activity_main_navigation_menu" translatable="false">MainNavigationMenu</string>
     <string name="title_start">Start</string>
@@ -104,6 +104,7 @@
     <string name="distance_example">10KM</string>
     <string name="n_tournamets"><b>XX</b> Tournament</string>
     <string name="tournamets">Tournament</string>
+    <string name="loading">Loading...</string>
 
     <string name="please_select_address">Please select the Address</string>
     <string name="save">Save</string>
@@ -131,6 +132,19 @@
     <string name="spots_left">Spots left</string>
     <string name="edit_tournament">Edit Tournament</string>
     <string name="enter_valid_number">Please add a valid number</string>
+    <string name="tournament_date">Tournament Date</string>
+    <string name="tournament_join_deadline">Tournament joining deadline</string>
+    <string name="level">level</string>
+    <string name="valid_level">Please select a level</string>
+    <string name="deadline_to_join">Join until: <br></br></string>
+    <string name="deadline_passed">Tournament Registration Deadline Passed<br></br></string>
+
+    <string name="beginner">Beginner</string>
+    <string name="intermediate">Intermediate</string>
+    <string name="advanced">Advanced</string>
+
+
+    <string name="level_dont_match">Your current level does not match the requirements</string>
 
 
     <string-array name="security_question">
@@ -150,6 +164,14 @@
         <item>Date: <b>(Latest  First)</b></item>
 
     </string-array>
+
+    <string-array name="tournament_level">
+        <item>--Tournament Level--</item>
+        <item>Beginner</item>
+        <item>Intermediate</item>
+        <item>Advanced</item>
+    </string-array>
+
     <string name="title_activity_main_menu">MainMenuActivity</string>
     <string name="title_home">Home</string>
     <string name="title_search">Search</string>

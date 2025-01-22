@@ -42,6 +42,8 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class EditMyAccountActivity extends AppCompatActivity {
 
@@ -67,6 +69,8 @@ public class EditMyAccountActivity extends AppCompatActivity {
 
     private FirebaseUser currentUser;
     private FirebaseAuth mAuth;
+
+    private AlertDialog sponsorDialog, waiting_dialog;
 
 
     @Override
@@ -239,9 +243,12 @@ public class EditMyAccountActivity extends AppCompatActivity {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_uploading_tournament, null);
         builder.setView(dialogView);
 
-//        waiting_dialog = builder.create();
+        waiting_dialog = builder.create();
 
-//        waiting_dialog.show();
+        waiting_dialog.setCancelable(false);
+        waiting_dialog.setCanceledOnTouchOutside(false);
+
+        waiting_dialog.show();
 
         storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
@@ -302,6 +309,12 @@ public class EditMyAccountActivity extends AppCompatActivity {
     }
 
     private void UploadPic(String folder){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_uploading_tournament, null);
+        builder.setView(dialogView);
+
+
         storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 
@@ -314,7 +327,7 @@ public class EditMyAccountActivity extends AppCompatActivity {
 
             Bitmap bitmap = ((BitmapDrawable) profile_pic.getDrawable()).getBitmap();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
             byte[] data = baos.toByteArray();
 
             UploadTask uploadTask = tournamentRef.putBytes(data);
@@ -327,6 +340,8 @@ public class EditMyAccountActivity extends AppCompatActivity {
                     String picUrl = uri.toString();
                     updateUserDB(picUrl);
                     Toast.makeText(getApplicationContext(), "Cover uploaded successfully!", Toast.LENGTH_SHORT).show();
+
+
 
                 }).addOnFailureListener(e ->
                         Toast.makeText(getApplicationContext(), "Failed to get cover URL", Toast.LENGTH_SHORT).show()
@@ -343,7 +358,10 @@ public class EditMyAccountActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                       AccountManager.currentUser.setProfilePic(newValue);
-                      finish();
+
+                        waiting_dialog.dismiss();
+
+
 
                     } else {
                     }

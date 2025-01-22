@@ -7,12 +7,10 @@ public class StringsValidationMethods {
     public StringsValidationMethods() {
     }
 
-    public boolean isNameValid(String name){
-
-        return Pattern.matches("^[A-Za-z]+( [A-Za-z]+)*$", name);
-
-
+    public boolean isNameValid(String name) {
+        return Pattern.matches("^[\\p{L}]+( [\\p{L}]+)*$", name);
     }
+
 
     public boolean isEmailValid(String email){
 

@@ -7,9 +7,11 @@
         <item name="fontFamily"> @font/funnel_display</item>
 
 
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:statusBarColor">@color/solmon_mixed_black</item>
 
 
-        <item name="colorPrimary">@color/solmon_mixed_black</item>
+        <item name="colorPrimary">@color/solmon</item>
         <item name="colorPrimaryVariant">@color/solmon_variant</item>
 
 

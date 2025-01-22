@@ -15,6 +15,8 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -22,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.location.Geocoder;
 import android.widget.TimePicker;
@@ -55,9 +58,11 @@ import org.w3c.dom.Text;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -99,6 +104,15 @@ public class CreateTournamentActivity extends AppCompatActivity {
 
 
     public static Tournament tournamentToEdit;
+
+
+    private TextView valid_date_deadline, valid_time_deadline, levelText, valid_level;
+
+    private EditText dateDeadlineEditText, timeDeadlineEditText;
+
+    private int levelSelected;
+
+    private Spinner levelSpinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,17 +155,37 @@ public class CreateTournamentActivity extends AppCompatActivity {
         dateEditText.setInputType(InputType.TYPE_NULL);
         timeEditText.setInputType(InputType.TYPE_NULL);
 
+        dateDeadlineEditText.setInputType(InputType.TYPE_NULL);
+        timeDeadlineEditText.setInputType(InputType.TYPE_NULL);
+
+
+
         dateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDatePicker();
+               
+                openDatePicker("normal");
             }
         });
 
         timeEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openTimePicker();
+                openTimePicker("normal");
+            }
+        });
+
+        dateDeadlineEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDatePicker("deadline");
+            }
+        });
+
+        timeDeadlineEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openTimePicker("deadline");
             }
         });
 
@@ -173,6 +207,9 @@ public class CreateTournamentActivity extends AppCompatActivity {
 
                 dateEditText.setText("");
                 timeEditText.setText("");
+
+                dateDeadlineEditText.setText("");
+                timeDeadlineEditText.setText("");
 
                 max_participantsEditText.setText("");
 
@@ -285,10 +322,37 @@ public class CreateTournamentActivity extends AppCompatActivity {
 
             }
         });
+
+
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.tournament_level,
+                android.R.layout.simple_spinner_item
+        );
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        levelSpinner.setAdapter(adapter);
+
+        levelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//             Toast.makeText(getContext(),String.valueOf(i),Toast.LENGTH_SHORT).show();
+
+                levelSelected = i;
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
     }
 
-
-    private void initViews(){
+    private void findViews(){
         titleEditText = findViewById(R.id.add_tournament_edittext_title);
         organizerEditText = findViewById(R.id.add_tournament_edittext_organizer);
         distanceEditText = findViewById(R.id.add_tournament_edittext_distance);
@@ -328,6 +392,24 @@ public class CreateTournamentActivity extends AppCompatActivity {
         activity_title = findViewById(R.id.activity_title);
         create_save_text = findViewById(R.id.tournament_create_save_text);
 
+        valid_date_deadline = findViewById(R.id.text_view_enter_valid_date_deadline);
+        valid_time_deadline= findViewById(R.id.text_view_enter_valid_time_deadline);
+
+        dateDeadlineEditText = findViewById(R.id.add_tournament_edittext_date_deadline);
+        timeDeadlineEditText = findViewById(R.id.add_tournament_edittext_time_deadline);
+
+        levelSpinner = findViewById(R.id.level_spinner);
+        levelText = findViewById(R.id.level_text);
+        valid_level = findViewById(R.id.valid_level);
+
+
+    }
+
+
+    private void initViews(){
+
+        findViews();
+
         if(isEditMode){
 
             addSponsor.setVisibility(View.GONE);
@@ -339,14 +421,19 @@ public class CreateTournamentActivity extends AppCompatActivity {
             distanceEditText.setText(tournamentToEdit.getDistance()+"");
 
             dateEditText.setText(tournamentToEdit.getDateTime().getYear()+"-"+tournamentToEdit.getDateTime().getMonth()+"-"+tournamentToEdit.getDateTime().getDay());
+            dateDeadlineEditText.setText(tournamentToEdit.getJoinDeadline().getYear()+"-"+tournamentToEdit.getJoinDeadline().getMonth()+"-"+tournamentToEdit.getJoinDeadline().getDay());
 
             String time = tournamentToEdit.getDateTime().getHour()+":"+tournamentToEdit.getDateTime().getMinute() +" "+tournamentToEdit.getDateTime().getAm_pm();
+            String deadLinetime = tournamentToEdit.getJoinDeadline().getHour()+":"+tournamentToEdit.getJoinDeadline().getMinute() +" "+tournamentToEdit.getJoinDeadline().getAm_pm();
 
             if(Utils.is24HourFormat(this)){
                 time = Utils.convert12HourTo24Hour(time);
+                deadLinetime = Utils.convert12HourTo24Hour(deadLinetime);
+
             }
 
             timeEditText.setText(time);
+            timeDeadlineEditText.setText(deadLinetime);
 
             if(tournamentToEdit.getMaxParticipants() != -1){
                 max_participantsEditText.setText(tournamentToEdit.getMaxParticipants()+"");
@@ -375,6 +462,26 @@ public class CreateTournamentActivity extends AppCompatActivity {
             }
 
 
+            levelSpinner.setVisibility(View.GONE);
+            levelText.setVisibility(View.VISIBLE);
+
+            levelSelected = Integer.parseInt(tournamentToEdit.getLevel());
+
+            switch (tournamentToEdit.getLevel()){
+                case "1":
+                    levelText.setText(getString(R.string.beginner));
+                    break;
+                case "2":
+                    levelText.setText(getString(R.string.intermediate));
+                    break;
+                case "3":
+                    levelText.setText(getString(R.string.advanced));
+                    break;
+            }
+
+
+
+
         }else{
             activity_title.setText(getString(R.string.add_tournament));
             create_save_text.setText(getString(R.string.create));
@@ -397,11 +504,16 @@ public class CreateTournamentActivity extends AppCompatActivity {
         String street = streetEditText.getText().toString();
         String country = countryEditText.getText().toString();
 
+        String dateDeadline = dateEditText.getText().toString();
+        String timeDeadline = timeEditText.getText().toString();
+
         if(validator.isValidTournamentTitle(title)){
             valid_title.setVisibility(View.GONE);
 
             if(!distance.isEmpty() && !distance.equals("0")){
                 valid_distance.setVisibility(View.GONE);
+
+
 
                 if(!date.isEmpty()){
                     valid_date.setVisibility(View.GONE);
@@ -409,20 +521,46 @@ public class CreateTournamentActivity extends AppCompatActivity {
                     if(!time.isEmpty()){
                         valid_time.setVisibility(View.GONE);
 
-                        if(!maxP.equals("0")){
-                            valid_max_part.setVisibility(View.GONE);
 
-                            if(validator.isValidCityName(city) && validator.isValidPostalCode(postal_code) && validator.isValidStreetAddress(street) && validator.isValidCityName(country)){
-                                valid_address.setVisibility(View.GONE);
+                        if(!dateDeadline.isEmpty()){
+                            valid_date_deadline.setVisibility(View.GONE);
 
-                                return true;
+                            if(!timeDeadline.isEmpty()){
+                                valid_time_deadline.setVisibility(View.GONE);
+
+
+                                if(levelSelected != 0){
+                                    valid_level.setVisibility(View.GONE);
+
+                                    if(!maxP.equals("0")){
+                                        valid_max_part.setVisibility(View.GONE);
+
+                                        if(validator.isValidCityName(city) && validator.isValidPostalCode(postal_code) && validator.isValidStreetAddress(street) && validator.isValidCityName(country)){
+                                            valid_address.setVisibility(View.GONE);
+
+                                            return true;
+                                        }else{
+                                            valid_address.setVisibility(View.VISIBLE);
+                                        }
+
+                                    }else{
+                                        valid_max_part.setVisibility(View.VISIBLE);
+                                    }
+
+                                }else{
+                                    valid_level.setVisibility(View.VISIBLE);
+                                }
+
+
+
                             }else{
-                                valid_address.setVisibility(View.VISIBLE);
+                                valid_time_deadline.setVisibility(View.VISIBLE);
                             }
-
                         }else{
-                            valid_max_part.setVisibility(View.VISIBLE);
+                            valid_date_deadline.setVisibility(View.VISIBLE);
                         }
+
+
 
 
                     }else{
@@ -448,7 +586,7 @@ public class CreateTournamentActivity extends AppCompatActivity {
 
     }
 
-    private void openDatePicker() {
+    private void openDatePicker(String forWhich) {
         // Get the current date
         int year = currentCalendar.get(Calendar.YEAR);
         int month = currentCalendar.get(Calendar.MONTH);
@@ -461,22 +599,43 @@ public class CreateTournamentActivity extends AppCompatActivity {
                 // Update the selectedCalendar with the selected date
                 selectedCalendar.set(selectedYear, selectedMonth, selectedDay);
 
+
+
                 // Format the selected date and set it in the EditText
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                dateEditText.setText(dateFormat.format(selectedCalendar.getTime()));
+                if ("deadline".equals(forWhich)) {
+                    dateDeadlineEditText.setText(dateFormat.format(selectedCalendar.getTime()));
+                } else {
+                    dateEditText.setText(dateFormat.format(selectedCalendar.getTime()));
+                }
 
                 // Clear the time field if the date changes
                 timeEditText.setText("");
             }
         }, year, month, day);
 
-        // Restrict past dates
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        // Restrict past dates for "normal" and "deadline"
+        if ("deadline".equals(forWhich)) {
+            // Optionally set additional constraints for deadlines
+            // For example, you can restrict deadlines to be before the event date
+            if (!dateEditText.getText().toString().isEmpty()) {
+                try {
+                    Date eventDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(dateEditText.getText().toString());
+                    if (eventDate != null) {
+                        datePickerDialog.getDatePicker().setMaxDate(eventDate.getTime());
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        }
 
         datePickerDialog.show();
     }
 
-    private void openTimePicker() {
+    private void openTimePicker(String forWhich) {
         // Get the current time
         int currentHour = currentCalendar.get(Calendar.HOUR_OF_DAY);
         int currentMinute = currentCalendar.get(Calendar.MINUTE);
@@ -495,9 +654,13 @@ public class CreateTournamentActivity extends AppCompatActivity {
                 selectedCalendar.set(Calendar.HOUR_OF_DAY, selectedHour);
                 selectedCalendar.set(Calendar.MINUTE, selectedMinute);
 
-                // Format the selected time and set it in the EditText
+                // Format the selected time and set it in the appropriate EditText
                 SimpleDateFormat timeFormat = new SimpleDateFormat(is24HourFormat ? "HH:mm" : "hh:mm a", Locale.getDefault());
-                timeEditText.setText(timeFormat.format(selectedCalendar.getTime()));
+                if ("deadline".equals(forWhich)) {
+                    timeDeadlineEditText.setText(timeFormat.format(selectedCalendar.getTime()));
+                } else {
+                    timeEditText.setText(timeFormat.format(selectedCalendar.getTime()));
+                }
             }
         }, isCurrentDay ? Math.max(currentHour, 0) : 0, isCurrentDay ? currentMinute : 0, is24HourFormat);
 
@@ -508,6 +671,7 @@ public class CreateTournamentActivity extends AppCompatActivity {
 
         timePickerDialog.show();
     }
+
 
 
     private boolean isSameDay(Calendar calendar1, Calendar calendar2) {
@@ -640,6 +804,8 @@ public class CreateTournamentActivity extends AppCompatActivity {
         builder.setView(dialogView);
 
         waiting_dialog = builder.create();
+        waiting_dialog.setCancelable(false);
+        waiting_dialog.setCanceledOnTouchOutside(false);
 
         waiting_dialog.show();
 
@@ -728,11 +894,18 @@ public class CreateTournamentActivity extends AppCompatActivity {
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Tournaments").child(tournamentID);
 
         String textFromTimeEditText = timeEditText.getText().toString();
+        String textFromTimeDeadlingEditText = timeDeadlineEditText.getText().toString();
+
         if(Utils.is24HourFormat(this)){
             textFromTimeEditText = Utils.convert24HourTo12Hour(textFromTimeEditText);
+            textFromTimeDeadlingEditText = Utils.convert24HourTo12Hour(textFromTimeDeadlingEditText);
         }
+
         String[] time = textFromTimeEditText.split(" ");
         String[] date = dateEditText.getText().toString().split("-");
+
+        String[] timeDeadline = textFromTimeDeadlingEditText.split(" ");
+        String[] dateDeadline = dateDeadlineEditText.getText().toString().split("-");
 
         int max;
         if(max_participantsEditText.getText().toString().isEmpty()){
@@ -743,6 +916,13 @@ public class CreateTournamentActivity extends AppCompatActivity {
 
         String am_pm = time[1];
         String[] hh_mm = time[0].split(":");
+
+        String am_pm_deadline = timeDeadline[1];
+        String[] hh_mm_deadline = timeDeadline[0].split(":");
+
+
+
+
 
         Tournament tournament = new Tournament(
                 tournamentID,
@@ -757,7 +937,10 @@ public class CreateTournamentActivity extends AppCompatActivity {
                         streetEditText.getText().toString(),
                         countryEditText.getText().toString()),
                 sponsors,
-                coverUrl, new ArrayList<>(), false);
+                coverUrl, new ArrayList<>(), false,
+                new DateTime(dateDeadline[0], dateDeadline[1], dateDeadline[2], hh_mm_deadline[0], hh_mm_deadline[1], am_pm_deadline),
+
+                String.valueOf(levelSelected));
 
 
 

@@ -146,7 +146,7 @@ public class SignupActivity extends AppCompatActivity  {
 
                     if(validator.isPasswordValid(password)){
                         valid_password.setVisibility(View.GONE);
-                        valid_password_req.setVisibility(View.GONE);
+//                        valid_password_req.setVisibility(View.GONE);
 
                         if(currentQuestionID !=0 && validator.isNameValid(answer)){
                             valid_answer.setVisibility(View.GONE);
@@ -159,7 +159,7 @@ public class SignupActivity extends AppCompatActivity  {
 
                     }else{
                         valid_password.setVisibility(View.VISIBLE);
-                        valid_password_req.setVisibility(View.VISIBLE);
+//                        valid_password_req.setVisibility(View.VISIBLE);
 
                     }
                 }else{
