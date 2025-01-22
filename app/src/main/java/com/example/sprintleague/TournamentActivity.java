@@ -49,8 +49,8 @@ public class TournamentActivity extends AppCompatActivity implements OnMapReadyC
 
     public static Tournament tournament;
 
-    private TextView tournamentTitle, tournamentDistance, tournamentDateTime, tournamentPlaces, tournamentAddress;
-    private ImageView tournamentCover;
+    private TextView tournamentTitle, tournamentDistance, tournamentDateTime, tournamentPlaces, tournamentAddress, tournamentOrganizerName, tournamentDateTimeDeadline,tournamentLevel;
+    private ImageView tournamentCover, profilePic, go_back;
     private RecyclerView tournamentSponsors;
     private CustomMapView tournamentMapView;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -59,14 +59,17 @@ public class TournamentActivity extends AppCompatActivity implements OnMapReadyC
     private LatLng tournamentLocation;
 
     private RelativeLayout map_current, map_direction;
-    private LinearLayout joinLayout, cantJoinLayout, editLayout, loginFirstLayout, alreadJoinedLayout;
+    private LinearLayout joinLayout, cantJoinLayout, editLayout, loginFirstLayout, alreadJoinedLayout, deadlinePassedLayout, levelDontMatchLayout;
 
     private LinearLayout joinClick, editClick;
 
     private SwipeRefreshLayout swipe_layout;
 
-    private DatabaseReference databaseReference;
-    private ValueEventListener valueEventListener;
+    private DatabaseReference databaseReference, organizerReference;
+    private ValueEventListener valueEventListener, organizerEventListener;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,6 +169,14 @@ public class TournamentActivity extends AppCompatActivity implements OnMapReadyC
             }
         });
 
+        go_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                finish();
+            }
+        });
+
     }
 
     private void initViews(){
@@ -175,6 +186,8 @@ public class TournamentActivity extends AppCompatActivity implements OnMapReadyC
             Toast.makeText(this, "Tournament data is not available", Toast.LENGTH_SHORT).show();
             return;
         }
+
+
 
         tournamentTitle.setText(tournament.getTitle());
         tournamentDistance.setText(tournament.getDistance() + " Km");
@@ -188,6 +201,47 @@ public class TournamentActivity extends AppCompatActivity implements OnMapReadyC
                     .into(tournamentCover);
         }
 
+        organizerReference = FirebaseDatabase.getInstance().getReference("users").child(tournament.getOrganizerID());
+
+        organizerEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+
+                if(user != null){
+                    tournamentOrganizerName.setText(user.getFirstName()+" "+user.getLastName());
+                    if(user.getProfilePic().isEmpty()){
+                        profilePic.setImageResource(R.drawable.empty_profile_pic);
+
+                    }else{
+                        Picasso.get()
+                                .load(user.getProfilePic())
+                                .into(profilePic);
+                    }
+
+                    if (organizerReference != null && organizerEventListener != null) {
+
+                        organizerReference.removeEventListener(organizerEventListener);
+                    }
+
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        organizerReference.addValueEventListener(organizerEventListener);
+
+
+
+
+
+
         String date = tournament.getDateTime().getDay() + "/" +
                 tournament.getDateTime().getMonth() + "/" +
                 tournament.getDateTime().getYear();
@@ -196,7 +250,32 @@ public class TournamentActivity extends AppCompatActivity implements OnMapReadyC
                 tournament.getDateTime().getAm_pm();
         tournamentDateTime.setText(String.format("%s, %s", date, time));
 
+        String dateDeadline = tournament.getJoinDeadline().getDay() + "/" +
+                tournament.getJoinDeadline().getMonth() + "/" +
+                tournament.getJoinDeadline().getYear();
+        String timeDeadline = tournament.getJoinDeadline().getHour() + ":" +
+                tournament.getJoinDeadline().getMinute() + " " +
+                tournament.getJoinDeadline().getAm_pm();
+        tournamentDateTimeDeadline.setText(String.format("%s, %s", dateDeadline, timeDeadline));
+
+
         tournamentAddress.setText(String.format("%s\n%s, %s", tournament.getAddress().getStreet(), tournament.getAddress().getPostalCode(), tournament.getAddress().getCity()));
+
+        switch (tournament.getLevel()){
+            case "1":
+                tournamentLevel.setText(getString(R.string.beginner));
+                tournamentLevel.setTextColor(getColor(R.color.color_1));
+                break;
+            case "2":
+                tournamentLevel.setText(getString(R.string.intermediate));
+                tournamentLevel.setTextColor(getColor(R.color.color_2));
+                break;
+
+            case "3":
+                tournamentLevel.setText(getString(R.string.advanced));
+                tournamentLevel.setTextColor(getColor(R.color.color_3));
+                break;
+        }
 
         tournamentMapView.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -232,6 +311,7 @@ public class TournamentActivity extends AppCompatActivity implements OnMapReadyC
         tournamentPlaces = findViewById(R.id.tournament_places);
         tournamentAddress = findViewById(R.id.tournament_address);
         tournamentCover = findViewById(R.id.tournament_cover);
+        tournamentLevel = findViewById(R.id.tournament_level);
         tournamentSponsors = findViewById(R.id.tournament_sponsorsrecyclerview);
         tournamentMapView = findViewById(R.id.tournament_mapview);
         map_current = findViewById(R.id.map_current);
@@ -242,10 +322,17 @@ public class TournamentActivity extends AppCompatActivity implements OnMapReadyC
         editLayout = findViewById(R.id.edit_layout);
         loginFirstLayout = findViewById(R.id.loginfirst_layout);
         alreadJoinedLayout = findViewById(R.id.already_joined_layout);
+        deadlinePassedLayout = findViewById(R.id.deadline_passed_layout);
+        levelDontMatchLayout = findViewById(R.id.level_notmatch_layout);
         swipe_layout = findViewById(R.id.swipe_layout_tournament);
 
         joinClick = findViewById(R.id.join_joinbutton);
         editClick = findViewById(R.id.edit_editbutton);
+
+        tournamentOrganizerName = findViewById(R.id.tournament_organizer);
+        tournamentDateTimeDeadline = findViewById(R.id.tournament_date_time_deadline);
+        profilePic = findViewById(R.id.tournament_profile_pic);
+        go_back = findViewById(R.id.go_back);
 
 
 
@@ -563,25 +650,37 @@ public class TournamentActivity extends AppCompatActivity implements OnMapReadyC
                     //check if attending list does not contain the current user (if not show join panel)
                     if(!tournament.getAttendingList().contains(AccountManager.currentUser.getId())){
 
-                        //check if there empty spots (if not show cant join panel)
-                        if(tournament.getMaxParticipants()!=-1 && tournament.getMaxParticipants() > tournament.getAttendingList().size()){
+                        // Check if the deadline date is not passed (if not show the deadline passed layout)
+                        if(!Utils.isDateBiggerThanToday(tournament.getJoinDeadline())){
 
-                            changeLayout("join");
+                            // Check if user level is bigger or equal min requirement (if not show level dont match layout)
+                            if(AccountManager.currentUser.getRanking() >= Double.parseDouble(tournament.getLevel())){
+
+                                //check if there empty spots (if not show cant join panel)
+                                if(tournament.getMaxParticipants()!=-1 && tournament.getMaxParticipants() > tournament.getAttendingList().size()){
+
+                                    changeLayout("join");
+                                }else{
+                                    changeLayout("cantjoin");
+                                }
+                            }else{
+                                changeLayout("level_dont_match");
+                            }
+
+
+
                         }else{
-                            changeLayout("cantjoin");
+                            changeLayout("deadline_passed");
                         }
+
+
                     }else{
                         changeLayout("already_joined");
                     }
                 }else{
 
+                    changeLayout("join");
 
-                    if(tournament.getMaxParticipants() == 0){
-                        changeLayout("cantjoin");
-                    }else{
-
-                        changeLayout("join");
-                    }
 
 
                 }
@@ -599,47 +698,52 @@ public class TournamentActivity extends AppCompatActivity implements OnMapReadyC
 
     private void changeLayout(String layoutName){
 
+        joinLayout.setVisibility(View.GONE);
+        cantJoinLayout.setVisibility(View.GONE);
+        editLayout.setVisibility(View.GONE);
+        loginFirstLayout.setVisibility(View.GONE);
+        alreadJoinedLayout.setVisibility(View.GONE);
+        deadlinePassedLayout.setVisibility(View.GONE);
+        levelDontMatchLayout.setVisibility(View.GONE);
 
-        if(layoutName.equals("join")){
-            joinLayout.setVisibility(View.VISIBLE);
+        switch (layoutName){
+            case "join":
+                joinLayout.setVisibility(View.VISIBLE);
+                break;
+            case "cantjoin":
+                cantJoinLayout.setVisibility(View.VISIBLE);
+                break;
+            case "edit":
+                editLayout.setVisibility(View.VISIBLE);
+                break;
+            case "login":
+                loginFirstLayout.setVisibility(View.VISIBLE);
+                break;
+            case "already_joined":
+                alreadJoinedLayout.setVisibility(View.VISIBLE);
+                break;
+            case "deadline_passed":
+                deadlinePassedLayout.setVisibility(View.VISIBLE);
+                break;
+            case "level_dont_match":
+                levelDontMatchLayout.setVisibility(View.VISIBLE);
+                break;
+
+        }
+
+
+
+
+        /*
+
+        if(layoutName.equals("deadline_passed")){
+            joinLayout.setVisibility(View.GONE);
             cantJoinLayout.setVisibility(View.GONE);
             editLayout.setVisibility(View.GONE);
             loginFirstLayout.setVisibility(View.GONE);
             alreadJoinedLayout.setVisibility(View.GONE);
 
-        }
-
-        if(layoutName.equals("cantjoin")){
-            joinLayout.setVisibility(View.GONE);
-            cantJoinLayout.setVisibility(View.VISIBLE);
-            editLayout.setVisibility(View.GONE);
-            loginFirstLayout.setVisibility(View.GONE);
-            alreadJoinedLayout.setVisibility(View.GONE);
-        }
-
-        if(layoutName.equals("edit")){
-            joinLayout.setVisibility(View.GONE);
-            cantJoinLayout.setVisibility(View.GONE);
-            editLayout.setVisibility(View.VISIBLE);
-            loginFirstLayout.setVisibility(View.GONE);
-            alreadJoinedLayout.setVisibility(View.GONE);
-        }
-
-        if(layoutName.equals("login")){
-            joinLayout.setVisibility(View.GONE);
-            cantJoinLayout.setVisibility(View.GONE);
-            editLayout.setVisibility(View.GONE);
-            loginFirstLayout.setVisibility(View.VISIBLE);
-            alreadJoinedLayout.setVisibility(View.GONE);
-        }
-
-        if(layoutName.equals("already_joined")){
-            joinLayout.setVisibility(View.GONE);
-            cantJoinLayout.setVisibility(View.GONE);
-            editLayout.setVisibility(View.GONE);
-            loginFirstLayout.setVisibility(View.GONE);
-            alreadJoinedLayout.setVisibility(View.VISIBLE);
-        }
+        }*/
     }
 
 

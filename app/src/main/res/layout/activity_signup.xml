@@ -337,11 +337,11 @@
 
             <TextView
 
-                android:visibility="gone"
+                android:visibility="visible"
                 android:textSize="12sp"
 
                 android:id="@+id/text_view_enter_password_req"
-                android:textColor="@color/error_red"
+
                 android:text="@string/password_requirements"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"

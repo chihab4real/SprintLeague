@@ -76,34 +76,34 @@ public class DateTime implements Comparable<DateTime>{
 
     @Override
     public int compareTo(DateTime other) {
-        long thisMillis = convertToMilliseconds();
-        long otherMillis = other.convertToMilliseconds();
+        long thisMillis = Utils.convertToMilliseconds(this);
+        long otherMillis = Utils.convertToMilliseconds(other);
         return Long.compare(thisMillis, otherMillis);
     }
 
-    // Converts the DateTime to milliseconds
-    public long convertToMilliseconds() {
-        // Use 24-hour format for easier conversion
-        int hour24 = Integer.parseInt(this.hour);
-        if (this.am_pm.equals("PM") && hour24 < 12) {
-            hour24 += 12;  // Convert PM to 24-hour format
-        } else if (this.am_pm.equals("AM") && hour24 == 12) {
-            hour24 = 0;  // Convert 12 AM to 0 hours
-        }
-
-        String dateString = this.year + "-" + this.month + "-" + this.day + " " + hour24 + ":" + this.minute;
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));  // Ensure we handle time zones correctly
-
-        try {
-            Date date = sdf.parse(dateString);
-            return date.getTime();  // Returns time in milliseconds
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
+//    // Converts the DateTime to milliseconds
+//    public long convertToMilliseconds() {
+//        // Use 24-hour format for easier conversion
+//        int hour24 = Integer.parseInt(this.hour);
+//        if (this.am_pm.equals("PM") && hour24 < 12) {
+//            hour24 += 12;  // Convert PM to 24-hour format
+//        } else if (this.am_pm.equals("AM") && hour24 == 12) {
+//            hour24 = 0;  // Convert 12 AM to 0 hours
+//        }
+//
+//        String dateString = this.year + "-" + this.month + "-" + this.day + " " + hour24 + ":" + this.minute;
+//
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+//        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));  // Ensure we handle time zones correctly
+//
+//        try {
+//            Date date = sdf.parse(dateString);
+//            return date.getTime();  // Returns time in milliseconds
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return 0;
+//    }
 
 
 
