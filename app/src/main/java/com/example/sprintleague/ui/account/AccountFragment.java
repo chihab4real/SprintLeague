@@ -20,12 +20,18 @@ import com.example.sprintleague.CreateTournamentActivity;
 import com.example.sprintleague.LoginActivity;
 import com.example.sprintleague.R;
 import com.example.sprintleague.SignupActivity;
+import com.example.sprintleague.Tournament;
+import com.example.sprintleague.TournamentActivity;
 import com.example.sprintleague.User;
+import com.example.sprintleague.Utils;
+import com.example.sprintleague.adapters.MyTournamentsListAdapter;
 import com.example.sprintleague.databinding.FragmentAccountBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import org.checkerframework.checker.units.qual.A;
+
+import java.util.ArrayList;
 
 public class AccountFragment extends Fragment {
 
@@ -35,7 +41,7 @@ public class AccountFragment extends Fragment {
     private RelativeLayout logout_clik;
     private LinearLayout user_logged_in_layout, user_not_logged_in_layout;
 
-    private LinearLayout editMyAccount, upcomingTour,archiveTour, createTour, myTour;
+    private LinearLayout editMyAccount, upcomingTour,archiveTour, createTour, myTour, finishedTour;
 
 
     private RelativeLayout login_click, signup_clik;
@@ -67,6 +73,7 @@ public class AccountFragment extends Fragment {
         archiveTour = root.findViewById(R.id.account_archive_tour_layout);
         createTour = root.findViewById(R.id.account_create_tour_layout);
         myTour = root.findViewById(R.id.account_my_tour_layout);
+        finishedTour = root.findViewById(R.id.account_finished_tour_layout);
 
         userRank = root.findViewById(R.id.account_user_rank);
 
@@ -124,12 +131,13 @@ public class AccountFragment extends Fragment {
         });
 
         upcomingTour.setOnClickListener(view -> {
-            Toast.makeText(getContext(),R.string.upcoming_tournaments,Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(),R.string.upcoming_tournaments,Toast.LENGTH_SHORT).show();
+            filterUpComingTournaments();
         });
 
 
         archiveTour.setOnClickListener(view -> {
-            Toast.makeText(getContext(),R.string.archive_tournaments,Toast.LENGTH_SHORT).show();
+           filterArchive();
         });
 
 
@@ -140,7 +148,15 @@ public class AccountFragment extends Fragment {
 
 
         myTour.setOnClickListener(view -> {
-            Toast.makeText(getContext(),R.string.my_tournament,Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(),R.string.my_tournament,Toast.LENGTH_SHORT).show();
+            filterMyTournaments();
+        });
+
+        finishedTour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterFinishedTournaments();
+            }
         });
 
 
@@ -198,5 +214,96 @@ public class AccountFragment extends Fragment {
             user_not_logged_in_layout.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    private void filterMyTournaments(){
+        MyTournamentsListActivity.myTournamets = new ArrayList<>();
+
+        if(AccountManager.currentUser != null && Utils.tournaments!= null && !Utils.tournaments.isEmpty()){
+            for(Tournament t : Utils.tournaments){
+                if(t.getOrganizerID().equals(AccountManager.currentUser.getId())){
+                    MyTournamentsListActivity.myTournamets.add(t);
+                }
+            }
+        }
+
+
+        startActivity(new Intent(getContext(), MyTournamentsListActivity.class));
+    }
+
+    private void filterUpComingTournaments(){
+
+        UpComingTournamentsActivity.upComingTournaments = new ArrayList<>();
+
+        if(AccountManager.currentUser.getAttendingTournaments()!= null && !AccountManager.currentUser.getAttendingTournaments().isEmpty()){
+            for(Tournament t : Utils.tournaments){
+                if(AccountManager.currentUser.getAttendingTournaments().contains(t.getID())){
+                    if(Utils.isDateBiggerThanToday(t.getDateTime())){
+                        UpComingTournamentsActivity.upComingTournaments.add(t);
+                    }
+
+                }
+            }
+        }
+
+
+
+
+        startActivity(new Intent(getContext(), UpComingTournamentsActivity.class));
+    }
+
+    private void filterFinishedTournaments(){
+        FinishedTournamentsActivity.finishedTournaments = new ArrayList<>();
+
+
+        if(AccountManager.currentUser != null && Utils.tournaments!= null && !Utils.tournaments.isEmpty()){
+
+            for(Tournament t : Utils.tournaments){
+
+                if(t.getOrganizerID().equals(AccountManager.currentUser.getId())){
+
+                    if(!Utils.isDateBiggerThanToday(t.getDateTime())){
+                        if(!t.isResultsPosted()){
+                            FinishedTournamentsActivity.finishedTournaments.add(t);
+                        }
+
+                    }
+
+
+
+                }
+            }
+        }
+
+
+
+        startActivity(new Intent(getContext(), FinishedTournamentsActivity.class));
+
+    }
+
+    private void filterArchive(){
+
+        TournamentsArchiveActivity.finishedWithResults = new ArrayList<>();
+        TournamentsArchiveActivity.onGoing = new ArrayList<>();
+
+        if(AccountManager.currentUser.getAttendingTournaments()!= null && !AccountManager.currentUser.getAttendingTournaments().isEmpty()){
+            for(Tournament t: Utils.tournaments){
+
+                if(AccountManager.currentUser.getAttendingTournaments().contains(t.getID())){
+                    if(t.isResultsPosted()){
+                        TournamentsArchiveActivity.finishedWithResults.add(t);
+                    }else{
+
+                        if(!Utils.isDateBiggerThanToday(t.getDateTime())){
+                            TournamentsArchiveActivity.onGoing.add(t);
+                        }
+                    }
+
+
+                }
+            }
+        }
+
+        startActivity(new Intent(getContext(), TournamentsArchiveActivity.class));
     }
 }

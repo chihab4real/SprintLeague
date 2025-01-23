@@ -91,6 +91,8 @@
     <string name="add">Add</string>
     <string name="create">Create</string>
     <string name="clear_all">Clear all</string>
+    <string name="finished_tournaments">Finished Tournaments</string>
+    <string name="submit_results">Submit results</string>
 
     <string name="enter_valid_title">Please enter a valid Title</string>
     <string name="enter_valid_distance">Please enter a valid Distance</string>
@@ -123,6 +125,7 @@
     <string name="sort_by">Sort by</string>
     <string name="tournament">Tournament</string>
     <string name="places_left">XX/YY left</string>
+    <string name="places_joined">XX/YY joined</string>
     <string name="address">Address</string>
     <string name="join">Join</string>
     <string name="cant_join">No more empty spots</string>
@@ -142,9 +145,29 @@
     <string name="beginner">Beginner</string>
     <string name="intermediate">Intermediate</string>
     <string name="advanced">Advanced</string>
+    <string name="hh_mm_ss">HH:MM:SS</string>
+    <string name="joined">Joined</string>
+    <string name="hint_result">If you do not click the check button, The result will no be saved</string>
+    <string name="saved">Saved</string>
+    <string name="total_engagment">Total Engagement</string>
+    <string name="analysis">Analysis</string>
+    <string name="of_joined">People who Attended</string>
+    <string name="avg_duration">Average duration</string>
+    <string name="avg_speed">Average speed</string>
+    <string name="kmh">XX Km/h</string>
+    <string name="open_tourn">Open Tournaments</string>
+    <string name="status">Status</string>
+    <string name="upcoming_tournament">Upcoming Tournaments</string>
+
+
+    <string name="ss">SS</string>
 
 
     <string name="level_dont_match">Your current level does not match the requirements</string>
+    <string name="my_archive">My Archive</string>
+    <string name="waiting_for_results">In Progress</string>
+    <string name="results">Results</string>
+    <string name="tournament_results">Tournaments Results</string>
 
 
     <string-array name="security_question">
@@ -176,4 +199,7 @@
     <string name="title_home">Home</string>
     <string name="title_search">Search</string>
     <string name="title_account">Account</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 </resources>

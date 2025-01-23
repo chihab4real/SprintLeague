@@ -26,11 +26,13 @@ public class Tournament  implements Comparable<Tournament>{
 
     private String level;
 
+    private boolean resultsPosted;
+
 
     public Tournament() {
     }
 
-    public Tournament(String id, String title, String organizerID, Float distance, DateTime dateTime, int maxParticipants, CustomeAddress address, ArrayList<Sponsor> sponsors, String coverlink, ArrayList<String> attendingList, boolean lockedForEdit, DateTime joinDeadline, String level) {
+    public Tournament(String id, String title, String organizerID, Float distance, DateTime dateTime, int maxParticipants, CustomeAddress address, ArrayList<Sponsor> sponsors, String coverlink, ArrayList<String> attendingList, boolean lockedForEdit, DateTime joinDeadline, String level, boolean resultsPosted) {
         this.ID = id;
         this.title = title;
         this.organizerID = organizerID;
@@ -53,6 +55,7 @@ public class Tournament  implements Comparable<Tournament>{
 
         this.joinDeadline = joinDeadline;
         this.level = level;
+        this.resultsPosted = resultsPosted;
 
 
     }
@@ -167,5 +170,13 @@ public class Tournament  implements Comparable<Tournament>{
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public boolean isResultsPosted() {
+        return resultsPosted;
+    }
+
+    public void setResultsPosted(boolean resultsPosted) {
+        this.resultsPosted = resultsPosted;
     }
 }

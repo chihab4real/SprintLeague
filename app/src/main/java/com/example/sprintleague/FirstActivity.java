@@ -139,6 +139,9 @@ public class FirstActivity extends AppCompatActivity {
 
     }
 
+
+
+
     private void getAllTournaments(){
         databaseReference = FirebaseDatabase.getInstance().getReference("Tournaments");
         ArrayList<Tournament> tournaments = new ArrayList<>();
