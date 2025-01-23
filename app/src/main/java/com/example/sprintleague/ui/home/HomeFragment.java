@@ -78,7 +78,13 @@ public class HomeFragment extends Fragment {
         recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
-        totalTournaments.setText(Utils.tournaments.size()+" "+getResources().getString(R.string.tournamets));
+        int x=0;
+        for(Tournament t: Utils.tournaments){
+            if(Utils.isDateBiggerThanToday(t.getDateTime())){
+                x++;
+            }
+        }
+        totalTournaments.setText(x+" "+getResources().getString(R.string.tournamets));
 
 //        adapter = new TournamentAdapter(getContext(), Utils.tournaments);
 

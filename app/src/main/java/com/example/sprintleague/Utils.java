@@ -73,6 +73,6 @@ public class Utils {
     }
 
     public static boolean isDateBiggerThanToday(DateTime dateTime1){
-       return convertToMilliseconds(dateTime1) > System.currentTimeMillis();
+       return convertToMilliseconds(dateTime1) > System.currentTimeMillis()+3600000;
     }
 }

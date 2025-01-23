@@ -4,7 +4,7 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
 
-        <item name="fontFamily"> @font/funnel_display</item>
+        <item name="fontFamily">@font/funnel_display</item>
 
 
         <item name="android:windowTranslucentStatus">false</item>
@@ -15,8 +15,16 @@
         <item name="colorPrimaryVariant">@color/solmon_variant</item>
 
 
-
     </style>
 
     <style name="Theme.SprintLeague" parent="Base.Theme.SprintLeague" />
+
+    <style name="Theme.SprintLeague.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.SprintLeague.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.SprintLeague.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

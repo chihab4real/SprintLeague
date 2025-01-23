@@ -36,7 +36,12 @@ public class TournamentAdapter extends RecyclerView.Adapter<TournamentAdapter.To
 
     public TournamentAdapter(Context context, ArrayList<Tournament> tournamentList,  OnItemClickListener listener) {
         this.context = context;
-        this.tournamentList = tournamentList;
+        this.tournamentList = new ArrayList<>();
+        for(Tournament t: tournamentList){
+            if(Utils.isDateBiggerThanToday(t.getDateTime())){
+                this.tournamentList.add(t);
+            }
+        }
         this.listener = listener;
     }
 
@@ -103,7 +108,27 @@ public class TournamentAdapter extends RecyclerView.Adapter<TournamentAdapter.To
             }
         };
 
-        mDatabase.addValueEventListener(valueEventListener);
+        if(AccountManager.currentUser!= null &&tournament.getID().equals(AccountManager.currentUser.getId())){
+
+
+                holder.organizerText.setText(AccountManager.currentUser.getFirstName()+" "+AccountManager.currentUser.getLastName());
+                if(AccountManager.currentUser.getProfilePic().isEmpty()){
+                    holder.profilePic.setImageResource(R.drawable.empty_profile_pic);
+
+                }else{
+                    Picasso.get()
+                            .load(AccountManager.currentUser.getProfilePic())
+                            .into(holder.profilePic);
+                }
+
+
+
+
+        }else{
+            mDatabase.addValueEventListener(valueEventListener);
+        }
+
+
 
 
 

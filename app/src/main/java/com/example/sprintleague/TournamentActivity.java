@@ -248,7 +248,7 @@ public class TournamentActivity extends AppCompatActivity implements OnMapReadyC
         String time = tournament.getDateTime().getHour() + ":" +
                 tournament.getDateTime().getMinute() + " " +
                 tournament.getDateTime().getAm_pm();
-        tournamentDateTime.setText(String.format("%s, %s", date, time));
+
 
         String dateDeadline = tournament.getJoinDeadline().getDay() + "/" +
                 tournament.getJoinDeadline().getMonth() + "/" +
@@ -256,6 +256,14 @@ public class TournamentActivity extends AppCompatActivity implements OnMapReadyC
         String timeDeadline = tournament.getJoinDeadline().getHour() + ":" +
                 tournament.getJoinDeadline().getMinute() + " " +
                 tournament.getJoinDeadline().getAm_pm();
+
+
+        if(Utils.is24HourFormat(TournamentActivity.this)){
+            time = Utils.convert12HourTo24Hour(time);
+            timeDeadline = Utils.convert12HourTo24Hour(timeDeadline);
+        }
+
+        tournamentDateTime.setText(String.format("%s, %s", date, time));
         tournamentDateTimeDeadline.setText(String.format("%s, %s", dateDeadline, timeDeadline));
 
 
@@ -651,10 +659,7 @@ public class TournamentActivity extends AppCompatActivity implements OnMapReadyC
                     if(!tournament.getAttendingList().contains(AccountManager.currentUser.getId())){
 
                         // Check if the deadline date is not passed (if not show the deadline passed layout)
-                        if(!Utils.isDateBiggerThanToday(tournament.getJoinDeadline())){
-
-                            // Check if user level is bigger or equal min requirement (if not show level dont match layout)
-                            if(AccountManager.currentUser.getRanking() >= Double.parseDouble(tournament.getLevel())){
+                        if(Utils.isDateBiggerThanToday(tournament.getJoinDeadline())){
 
                                 //check if there empty spots (if not show cant join panel)
                                 if(tournament.getMaxParticipants()!=-1 && tournament.getMaxParticipants() > tournament.getAttendingList().size()){
@@ -663,11 +668,6 @@ public class TournamentActivity extends AppCompatActivity implements OnMapReadyC
                                 }else{
                                     changeLayout("cantjoin");
                                 }
-                            }else{
-                                changeLayout("level_dont_match");
-                            }
-
-
 
                         }else{
                             changeLayout("deadline_passed");

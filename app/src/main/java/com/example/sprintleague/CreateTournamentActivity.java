@@ -285,9 +285,13 @@ public class CreateTournamentActivity extends AppCompatActivity {
         go_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference lockRef = FirebaseDatabase.getInstance().getReference("Tournaments").child(tournamentToEdit.getID());
 
-                lockRef.child("lockedForEdit").setValue(false);
+                if(isEditMode){
+                    DatabaseReference lockRef = FirebaseDatabase.getInstance().getReference("Tournaments").child(tournamentToEdit.getID());
+
+                    lockRef.child("lockedForEdit").setValue(false);
+                }
+
                 finish();
             }
         });
@@ -352,6 +356,18 @@ public class CreateTournamentActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        // Show a toast message
+
+        DatabaseReference lockRef = FirebaseDatabase.getInstance().getReference("Tournaments").child(tournamentToEdit.getID());
+
+        lockRef.child("lockedForEdit").setValue(false);
+
+
+        // Call the super method if you want the default back button behavior
+        super.onBackPressed();
+    }
     private void findViews(){
         titleEditText = findViewById(R.id.add_tournament_edittext_title);
         organizerEditText = findViewById(R.id.add_tournament_edittext_organizer);
@@ -940,7 +956,7 @@ public class CreateTournamentActivity extends AppCompatActivity {
                 coverUrl, new ArrayList<>(), false,
                 new DateTime(dateDeadline[0], dateDeadline[1], dateDeadline[2], hh_mm_deadline[0], hh_mm_deadline[1], am_pm_deadline),
 
-                String.valueOf(levelSelected));
+                String.valueOf(levelSelected), false);
 
 
 
